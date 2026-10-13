@@ -218,6 +218,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let normalizedOvalRect = computeOvalRect(for: ovalMatchChallenge)
         guard normalizedOvalRect != ovalRect else { return }
 
+        objectWillChange.send()
         ovalRect = normalizedOvalRect
         livenessViewControllerDelegate?.drawOvalInCanvas(normalizedOvalRect)
     }

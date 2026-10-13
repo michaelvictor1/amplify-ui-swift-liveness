@@ -443,4 +443,32 @@ final class LivenessPreviewGeometryTests: XCTestCase {
     func testInstructionKeepsItsInsetWhenItAlreadyClearsTheButtons() {
         XCTAssertEqual(LivenessPreviewGeometry.instructionTopInset(16, previewMinY: 79, controlsMaxY: 95), 16)
     }
+
+    /// Given: An oval whose top is below the close button, with a 16pt gap
+    /// When: The instruction band is worked out
+    /// Then: It starts under the button and ends 16pt above the oval
+    func testInstructionBandEndsAboveTheOval() {
+        let band = LivenessPreviewGeometry.instructionBandAboveOval(
+            ovalTop: 88,
+            gap: 16,
+            buttonClearance: 24
+        )
+        XCTAssertEqual(band.top, 24)
+        XCTAssertEqual(band.height, 48)
+        XCTAssertEqual(band.top + band.height, 88 - 16)
+    }
+
+    /// Given: An oval so high that clearing the close button would cover it
+    /// When: The instruction band is worked out
+    /// Then: The band still ends above the oval
+    func testInstructionBandStaysAboveTheOvalWhenTheButtonWouldCoverIt() {
+        let band = LivenessPreviewGeometry.instructionBandAboveOval(
+            ovalTop: 30,
+            gap: 16,
+            buttonClearance: 24
+        )
+        XCTAssertEqual(band.top, 14)
+        XCTAssertEqual(band.height, 0)
+        XCTAssertEqual(band.top + band.height, 30 - 16)
+    }
 }
