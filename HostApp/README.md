@@ -29,7 +29,7 @@ cd amplify-ui-swift-livenes/HostApp
 
 7. Once signed in and authenticated, the "Create Liveness Session" is enabled.  Choose **Light** or **No light** to pick the challenge the session is created with (`FaceMovementAndLightChallenge` or `FaceMovementChallenge`), then click the button to generate and get a session id from your backend.  The choice is kept between launches.
 
-8. Once a session id is created, the Liveness Check screen is displayed.  Follow the instructions and click on Start video check button to begin liveness verification.
+8. Once a session id is created, the Liveness Check screen is displayed.  Follow the instructions and click on Verify Me to begin liveness verification.
 
 ## Provision AWS Backend Resources
 

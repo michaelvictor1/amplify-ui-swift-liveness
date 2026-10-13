@@ -26,7 +26,7 @@ enum LocalizedStrings {
     /// en = "A small percentage of individuals may experience epileptic seizures when exposed to colored lights. Use caution if you, or anyone in your family, have an epileptic condition."
     static let get_ready_photosensitivity_dialog_description = "amplify_ui_liveness_get_ready_photosensitivity_dialog_description".localized()
 
-    /// en = "Start video check"
+    /// en = "Verify Me"
     static let get_ready_begin_check = "amplify_ui_liveness_get_ready_begin_check".localized()
 
     /// en = "REC"

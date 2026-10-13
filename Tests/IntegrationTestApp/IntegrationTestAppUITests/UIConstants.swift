@@ -10,7 +10,7 @@ struct UIConstants {
     static let primaryButton = "Create Liveness Session"
  
     struct BeginCheck {
-        static let primaryButton = "Start video check"
+        static let primaryButton = "Verify Me"
         static let warningTitle = "Photosensitivity Warning"
         static let warningDescription = "This check flashes different colors. Use caution if you are photosensitive."
         static let instruction = "Center your face"
