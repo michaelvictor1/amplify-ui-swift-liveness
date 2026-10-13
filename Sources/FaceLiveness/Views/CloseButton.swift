@@ -7,23 +7,31 @@
 
 import SwiftUI
 
+/// 44pt glass circle, same role as the app's icon buttons.
 struct CloseButton: View {
-    @Environment(\.faceLivenessDetectorTheme) private var theme
     let action: () -> Void
 
     var body: some View {
-        Button(
-            action: action,
-            label: {
+        if #available(iOS 26, *) {
+            Button(action: action) {
                 Image(systemName: "xmark")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(theme.colors.onBackground)
+                    .font(.system(size: 17, weight: .semibold))
                     .frame(width: 44, height: 44)
-                    .background(theme.colors.background)
-                    .clipShape(Circle())
-                    .accessibilityLabel(Text(LocalizedStrings.close_button_a11y))
             }
-        )
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .accessibilityLabel(LocalizedStrings.close_button_a11y)
+        } else {
+            Button(action: action) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .frame(width: 44, height: 44)
+                    .background(.regularMaterial)
+                    .clipShape(Circle())
+                    .accessibilityLabel(LocalizedStrings.close_button_a11y)
+            }
+        }
     }
 }
 

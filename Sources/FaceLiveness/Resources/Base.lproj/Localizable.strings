@@ -25,8 +25,6 @@
 "amplify_ui_liveness_challenge_connecting" = "Connecting...";
 "amplify_ui_liveness_challenge_verifying" = "Verifying";
 "amplify_ui_liveness_challenge_cancel_a11y" = "Cancel Challenge";
-"amplify_ui_liveness_cancel" = "Cancel";
-
 "amplify_ui_liveness_camera_setting_alert_title" = "Change Your Camera Settings";
 "amplify_ui_liveness_camera_setting_alert_message" = "Allow camera permission in settings.";
 "amplify_ui_liveness_camera_setting_alert_update_setting_button_text" = "Update Setting";
