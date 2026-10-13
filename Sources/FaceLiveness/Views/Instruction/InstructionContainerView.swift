@@ -22,12 +22,18 @@ struct InstructionContainerView: View {
             line(LocalizedStrings.challenge_instruction_move_face_back)
                 .onAppear { announce(LocalizedStrings.challenge_instruction_move_face_back) }
 
-        case .awaitingFaceInOvalMatch(let reason, _):
-            line(reason.localizedValue)
+        case .awaitingFaceInOvalMatch(let reason, let percentage):
+            VStack(spacing: 8) {
+                line(reason.localizedValue)
+                ProgressBarView(percentage: percentage)
+            }
 
         case .recording(ovalDisplayed: true):
-            line(LocalizedStrings.challenge_instruction_move_face_closer)
-                .onAppear { announce(LocalizedStrings.challenge_instruction_move_face_closer) }
+            VStack(spacing: 8) {
+                line(LocalizedStrings.challenge_instruction_move_face_closer)
+                    .onAppear { announce(LocalizedStrings.challenge_instruction_move_face_closer) }
+                ProgressBarView(percentage: 0.2)
+            }
 
         case .pendingFacePreparedConfirmation(let reason):
             line(reason.localizedValue)

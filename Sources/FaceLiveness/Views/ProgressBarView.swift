@@ -6,33 +6,39 @@
 //
 
 import SwiftUI
+import UIKit
 
+/// Same track as Create Account: 100×7, fully rounded.
+/// Light track is brand.100, dark track is brand.700, fill is brand primary.
 struct ProgressBarView: View {
-    let emptyColor: Color
-    let borderColor: Color
-    let fillColor: Color
+    @Environment(\.faceLivenessDetectorTheme) private var theme
     let percentage: Double
 
-    var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                Rectangle()
-                    .border(borderColor, width: 1)
-                    .cornerRadius(8, corners: .allCorners)
-                    .frame(
-                        width: proxy.size.width,
-                        height: proxy.size.height - 8
-                    )
-                    .foregroundColor(emptyColor)
+    private let trackWidth: CGFloat = 100
+    private let trackHeight: CGFloat = 7
 
-                Rectangle()
-                    .cornerRadius(8, corners: .allCorners)
-                    .frame(
-                        width: min(percentage, 1) * proxy.size.width,
-                        height: proxy.size.height - 8
-                    )
-                    .foregroundColor(fillColor)
-            }
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Capsule()
+                .fill(trackColor)
+                .frame(width: trackWidth, height: trackHeight)
+            Capsule()
+                .fill(theme.colors.primary)
+                .frame(width: trackWidth * clamped, height: trackHeight)
         }
+        .frame(maxWidth: .infinity)
+        .accessibilityHidden(true)
+    }
+
+    private var clamped: CGFloat {
+        CGFloat(min(max(percentage, 0), 1))
+    }
+
+    private var trackColor: Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.hex("#001258")
+                : UIColor.hex("#E2E7F7")
+        })
     }
 }
