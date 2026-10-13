@@ -43,22 +43,37 @@ struct GetReadyPageView: View {
         }
     }
 
+    @ViewBuilder
     private var beginCheckButton: some View {
-        Button(
-            action: onBegin,
-            label: {
+        if #available(iOS 26, *) {
+            Button(action: onBegin) {
+                Text(LocalizedStrings.get_ready_begin_check)
+                    .font(theme.fonts.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(theme.colors.onPrimary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+            }
+            .buttonStyle(.glassProminent)
+            .buttonBorderShape(.capsule)
+            .tint(theme.colors.primary)
+            .disabled(beginCheckButtonDisabled)
+            .padding([.leading, .trailing])
+            .padding(.bottom, 16)
+        } else {
+            Button(action: onBegin) {
                 Text(LocalizedStrings.get_ready_begin_check)
                     .font(theme.fonts.body)
                     .foregroundColor(theme.colors.onPrimary)
                     .frame(maxWidth: .infinity)
             }
-        )
-        .disabled(beginCheckButtonDisabled)
-        .frame(height: 52)
-        ._background { theme.colors.primary }
-        .cornerRadius(14)
-        .padding([.leading, .trailing])
-        .padding(.bottom, 16)
+            .disabled(beginCheckButtonDisabled)
+            .frame(height: 52)
+            ._background { theme.colors.primary }
+            .cornerRadius(14)
+            .padding([.leading, .trailing])
+            .padding(.bottom, 16)
+        }
     }
 }
 
