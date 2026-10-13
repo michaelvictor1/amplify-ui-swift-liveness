@@ -75,15 +75,10 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             }
             .edgesIgnoringSafeArea(.all)
 
-            // The REC indicator and close button sit in the screen's top corners rather than
-            // above the instruction, so they don't push it onto the oval.
+            // The close button sits in the screen's top corner rather than above the
+            // instruction, so it doesn't push the instruction onto the oval.
             VStack {
                 HStack(alignment: .top) {
-                    if viewModel.livenessState.shouldDisplayRecordingIcon {
-                        RecordingButton()
-                            .accessibilityHidden(true)
-                    }
-
                     Spacer()
 
                     CancelButton(
