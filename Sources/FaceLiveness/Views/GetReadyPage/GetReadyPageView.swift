@@ -12,20 +12,17 @@ struct GetReadyPageView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let beginCheckButtonDisabled: Bool
     let onBegin: () -> Void
-    let challenge: Challenge
     let cameraPosition: LivenessCamera
     let sharedCaptureSession: LivenessCaptureSession?
     
     init(
         onBegin: @escaping () -> Void,
         beginCheckButtonDisabled: Bool = false,
-        challenge: Challenge,
         cameraPosition: LivenessCamera,
         sharedCaptureSession: LivenessCaptureSession? = nil
     ) {
         self.onBegin = onBegin
         self.beginCheckButtonDisabled = beginCheckButtonDisabled
-        self.challenge = challenge
         self.cameraPosition = cameraPosition
         self.sharedCaptureSession = sharedCaptureSession
     }
@@ -35,13 +32,6 @@ struct GetReadyPageView: View {
             ZStack {
                 CameraPreviewView(cameraPosition: cameraPosition, sharedCaptureSession: sharedCaptureSession)
                 VStack {
-                    WarningBox(
-                        titleText: LocalizedStrings.get_ready_photosensitivity_title,
-                        bodyText: LocalizedStrings.get_ready_photosensitivity_description,
-                        popoverContent: { photosensitivityWarningPopoverContent }
-                    )
-                    .accessibilityElement(children: .combine)
-                    .opacity(challenge == Challenge.faceMovementAndLightChallenge("2.0.0") ? 1.0 : 0.0)
                     Text(LocalizedStrings.preview_center_your_face_text)
                         .font(theme.fonts.title)
                         .foregroundColor(theme.colors.onBackground)
@@ -70,27 +60,12 @@ struct GetReadyPageView: View {
         .padding([.leading, .trailing])
         .padding(.bottom, 16)
     }
-
-    private var photosensitivityWarningPopoverContent: some View {
-        VStack {
-            Text(LocalizedStrings.get_ready_photosensitivity_dialog_title)
-                .font(theme.fonts.title3)
-                .fontWeight(.medium)
-                .frame(alignment: .center)
-                .padding()
-            Text(LocalizedStrings.get_ready_photosensitivity_dialog_description)
-                .font(theme.fonts.body)
-                .padding()
-            Spacer()
-        }
-    }
 }
 
 struct GetReadyPageView_Previews: PreviewProvider {
     static var previews: some View {
         GetReadyPageView(
             onBegin: {},
-            challenge: .faceMovementAndLightChallenge("2.0.0"),
             cameraPosition: .front)
     }
 }

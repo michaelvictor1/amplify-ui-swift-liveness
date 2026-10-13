@@ -231,7 +231,7 @@ public struct FaceLivenessDetectorView: View {
                 .onAppear {
                     advanceIfWaitingOnPortrait()
                 }
-        case .displayingGetReadyView(let challenge, let cameraPosition):
+        case .displayingGetReadyView(_, let cameraPosition):
             GetReadyPageView(
                 onBegin: {
                     // the check must not start underneath the rotate prompt
@@ -241,7 +241,6 @@ public struct FaceLivenessDetectorView: View {
                     displayState = .displayingLiveness
                 },
                 beginCheckButtonDisabled: false,
-                challenge: challenge,
                 cameraPosition: cameraPosition,
                 sharedCaptureSession: viewModel.captureSession
             )
