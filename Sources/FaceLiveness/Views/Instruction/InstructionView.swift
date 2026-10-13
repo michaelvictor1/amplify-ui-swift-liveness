@@ -7,21 +7,16 @@
 
 import SwiftUI
 
+/// Same treatment as "Center your face": title, on-background, centered, no chip.
 struct InstructionView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let text: String
-    let backgroundColor: Color
-    /// Defaults to the theme's `onBackground` color.
-    var textColor: Color?
-    /// Defaults to the theme's `body` font.
-    var font: Font?
 
     var body: some View {
         Text(text)
-            .foregroundColor(textColor ?? theme.colors.onBackground)
-            .font(font ?? theme.fonts.body)
-            .padding(12)
-            .background(backgroundColor)
-            .cornerRadius(8)
+            .font(theme.fonts.title)
+            .foregroundColor(theme.colors.onBackground)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
     }
 }

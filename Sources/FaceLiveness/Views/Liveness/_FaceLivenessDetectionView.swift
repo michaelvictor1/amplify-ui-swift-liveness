@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct _FaceLivenessDetectionView<VideoView: View>: View {
+    @Environment(\.faceLivenessDetectorTheme) private var theme
     let videoView: VideoView
     @ObservedObject var viewModel: FaceLivenessDetectionViewModel
     @Binding var displayResultsView: Bool
@@ -28,127 +30,55 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
         )
     }
 
-    /// Where the preview's top and the bottom of the close button row are, in the `layoutSpace`
-    /// coordinate space.
-    @State private var previewMinY: CGFloat = 0
-    @State private var controlsMaxY: CGFloat = 0
-
-    /// Gap between the instruction and the top of the oval.
-    private let instructionOvalGap: CGFloat = 16
-
-    /// The instruction is inset 24pt from the preview's edges while the face guide is on screen
-    /// and 16pt otherwise.
-    private var instructionPadding: CGFloat {
-        viewModel.livenessState.isFaceGuideDisplayed ? 24 : 16
-    }
-
-    private var instructionTopInset: CGFloat {
-        LivenessPreviewGeometry.instructionTopInset(
-            instructionPadding,
-            previewMinY: previewMinY,
-            controlsMaxY: controlsMaxY
-        )
-    }
-
-    /// Face-fit lines sit in one band that ends above the oval. Before the oval is drawn they
-    /// stay at the top of the preview.
-    private var instructionBandAboveOval: (top: CGFloat, height: CGFloat)? {
-        let ovalTop = viewModel.ovalRect.minY
-        guard viewModel.livenessState.isFaceGuideDisplayed, ovalTop > 0 else { return nil }
-        return LivenessPreviewGeometry.instructionBandAboveOval(
-            ovalTop: ovalTop,
-            gap: instructionOvalGap,
-            buttonClearance: instructionTopInset
-        )
-    }
-
     var body: some View {
-        ZStack {
+        VStack(spacing: 0) {
             ZStack {
                 Color.black
                 videoView
 
-                Color.clear
-                .aspectRatio(3/4, contentMode: .fit)
-                .overlay(alignment: .top) {
-                    instructionLayer
-                }
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear.preference(
-                            key: PreviewMinYKey.self,
-                            value: proxy.frame(in: .named(layoutSpace)).minY
-                        )
-                    }
-                )
-                .frame(maxWidth: .infinity)
-            }
-            .edgesIgnoringSafeArea(.all)
-
-            // The close button stays in the top corner. The instruction sits above the oval.
-            VStack {
-                HStack(alignment: .top) {
+                VStack {
+                    InstructionContainerView(viewModel: viewModel)
                     Spacer()
-
-                    CancelButton(
-                        options: cancelButtonOptions,
-                        action: viewModel.closeButtonAction
-                    )
                 }
-                .padding(16)
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear.preference(
-                            key: ControlsMaxYKey.self,
-                            value: proxy.frame(in: .named(layoutSpace)).maxY
-                        )
-                    }
-                )
+                .padding()
+            }
 
-                Spacer()
+            if cancelButtonOptions.resolved != .hidden {
+                cancelButton
             }
         }
-        .coordinateSpace(name: layoutSpace)
-        .onPreferenceChange(PreviewMinYKey.self) { previewMinY = $0 ?? previewMinY }
-        .onPreferenceChange(ControlsMaxYKey.self) { controlsMaxY = $0 ?? controlsMaxY }
     }
 
-    @ViewBuilder
-    private var instructionLayer: some View {
-        if let band = instructionBandAboveOval {
-            VStack(spacing: 0) {
-                Spacer(minLength: 0)
-                InstructionContainerView(viewModel: viewModel)
-            }
-            .padding(.horizontal, instructionPadding)
-            .frame(height: band.height, alignment: .bottom)
-            .frame(maxWidth: .infinity, alignment: .top)
-            .padding(.top, band.top)
-        } else {
-            VStack(spacing: 5) {
-                InstructionContainerView(viewModel: viewModel)
-                Spacer(minLength: 0)
-            }
-            .padding(.top, instructionTopInset)
-            .padding(.horizontal, instructionPadding)
+    /// Same slot as Verify Me. Solid pill, same fill and type as Not Now.
+    private var cancelButton: some View {
+        Button(action: viewModel.closeButtonAction) {
+            Text(LocalizedStrings.cancel)
+                .font(theme.fonts.body)
+                .fontWeight(.semibold)
+                .foregroundColor(cancelLabel)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
         }
+        .buttonStyle(.plain)
+        .background(cancelFill)
+        .clipShape(Capsule())
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
     }
-}
 
-private let layoutSpace = "FaceLivenessDetectionLayout"
-
-/// Optional so a view that doesn't measure, and so contributes the default, can't overwrite a
-/// measurement while the values are combined.
-private struct PreviewMinYKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = nextValue() ?? value
+    private var cancelFill: Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.hex("#101828")
+                : UIColor.hex("#F9FAFB")
+        })
     }
-}
 
-private struct ControlsMaxYKey: PreferenceKey {
-    static let defaultValue: CGFloat? = nil
-    static func reduce(value: inout CGFloat?, nextValue: () -> CGFloat?) {
-        value = nextValue() ?? value
+    private var cancelLabel: Color {
+        Color(uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor.hex("#D0D5DD")
+                : UIColor.hex("#475467")
+        })
     }
 }
