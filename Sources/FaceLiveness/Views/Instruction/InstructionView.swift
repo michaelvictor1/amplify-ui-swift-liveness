@@ -11,11 +11,12 @@ import SwiftUI
 struct InstructionView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let text: String
+    var color: Color?
 
     var body: some View {
         Text(text)
             .font(theme.fonts.title)
-            .foregroundColor(theme.colors.onBackground)
+            .foregroundColor(color ?? theme.colors.onBackground)
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
     }

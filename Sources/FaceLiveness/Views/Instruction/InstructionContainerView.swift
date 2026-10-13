@@ -39,7 +39,7 @@ struct InstructionContainerView: View {
             line(reason.localizedValue)
 
         case .completedDisplayingFreshness, .completedNoLightCheck:
-            line(LocalizedStrings.challenge_verifying)
+            line(LocalizedStrings.challenge_verifying, color: .white)
                 .onAppear { announce(LocalizedStrings.challenge_verifying) }
 
         case .faceMatched:
@@ -54,8 +54,8 @@ struct InstructionContainerView: View {
         }
     }
 
-    private func line(_ text: String) -> some View {
-        InstructionView(text: text)
+    private func line(_ text: String, color: Color? = nil) -> some View {
+        InstructionView(text: text, color: color)
     }
 
     private func announce(_ text: String) {
