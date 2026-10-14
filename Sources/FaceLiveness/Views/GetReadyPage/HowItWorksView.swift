@@ -70,6 +70,7 @@ struct HowItWorksView: View {
                             .frame(minHeight: 48)
                         }
                     }
+                    .padding(.top, 24)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 24)
