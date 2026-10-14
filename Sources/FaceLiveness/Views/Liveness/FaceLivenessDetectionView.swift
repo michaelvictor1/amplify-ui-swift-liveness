@@ -240,6 +240,7 @@ public struct FaceLivenessDetectorView: View {
                     else { return }
                     displayState = .displayingLiveness
                 },
+                onClose: viewModel.closeButtonAction,
                 beginCheckButtonDisabled: false,
                 cameraPosition: cameraPosition,
                 sharedCaptureSession: viewModel.captureSession

@@ -33,12 +33,15 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             Color.black
             videoView
 
-            VStack(alignment: .trailing, spacing: 12) {
-                if cancelButtonOptions.resolved != .hidden {
-                    CancelButton(
-                        options: cancelButtonOptions,
-                        action: viewModel.closeButtonAction
-                    )
+            VStack(spacing: 12) {
+                HStack {
+                    Spacer(minLength: 0)
+                    if cancelButtonOptions.resolved != .hidden {
+                        CancelButton(
+                            options: cancelButtonOptions,
+                            action: viewModel.closeButtonAction
+                        )
+                    }
                 }
 
                 InstructionContainerView(viewModel: viewModel)
@@ -47,6 +50,37 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             }
             .padding(.horizontal, 16)
             .padding(.top, 16)
+        }
+        .overlay {
+            progressBelowOval
+        }
+    }
+
+    /// Fit progress sits under the oval, not under the direction line.
+    @ViewBuilder
+    private var progressBelowOval: some View {
+        if let percentage = fitProgress, viewModel.ovalRect.height > 0 {
+            GeometryReader { geo in
+                let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
+                let barHeight: CGFloat = 7
+                let y = preview.minY + viewModel.ovalRect.maxY + 16 + barHeight / 2
+                ProgressBarView(percentage: percentage)
+                    .position(x: geo.size.width / 2, y: y)
+            }
+            .allowsHitTesting(false)
+        }
+    }
+
+    private var fitProgress: Double? {
+        switch viewModel.livenessState.state {
+        case .awaitingFaceInOvalMatch(.faceTooClose, _):
+            return nil
+        case .awaitingFaceInOvalMatch(_, let percentage):
+            return percentage
+        case .recording(ovalDisplayed: true):
+            return 0.2
+        default:
+            return nil
         }
     }
 }

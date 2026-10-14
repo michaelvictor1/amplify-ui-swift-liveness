@@ -15,11 +15,11 @@ struct CloseButton: View {
         if #available(iOS 26, *) {
             Button(action: action) {
                 Image(systemName: "xmark")
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .bold))
                     .frame(width: 44, height: 44)
             }
-            .buttonStyle(.glass)
-            .buttonBorderShape(.circle)
+            .buttonStyle(.plain)
+            .glassEffect(.regular.interactive(), in: .circle)
             .accessibilityLabel(LocalizedStrings.close_button_a11y)
         } else {
             Button(action: action) {

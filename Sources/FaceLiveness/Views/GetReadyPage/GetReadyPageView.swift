@@ -12,32 +12,42 @@ struct GetReadyPageView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let beginCheckButtonDisabled: Bool
     let onBegin: () -> Void
+    let onClose: () -> Void
     let cameraPosition: LivenessCamera
     let sharedCaptureSession: LivenessCaptureSession?
     
     init(
         onBegin: @escaping () -> Void,
+        onClose: @escaping () -> Void,
         beginCheckButtonDisabled: Bool = false,
         cameraPosition: LivenessCamera,
         sharedCaptureSession: LivenessCaptureSession? = nil
     ) {
         self.onBegin = onBegin
+        self.onClose = onClose
         self.beginCheckButtonDisabled = beginCheckButtonDisabled
         self.cameraPosition = cameraPosition
         self.sharedCaptureSession = sharedCaptureSession
     }
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             ZStack {
                 CameraPreviewView(cameraPosition: cameraPosition, sharedCaptureSession: sharedCaptureSession)
-                VStack {
+                VStack(spacing: 12) {
+                    HStack {
+                        Spacer(minLength: 0)
+                        CloseButton(action: onClose)
+                    }
                     Text(LocalizedStrings.preview_center_your_face_text)
                         .font(theme.fonts.title)
                         .foregroundColor(theme.colors.onBackground)
                         .multilineTextAlignment(.center)
-                    Spacer()
-                }.padding()
+                        .frame(maxWidth: .infinity)
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
             }
             beginCheckButton
         }
@@ -81,6 +91,7 @@ struct GetReadyPageView_Previews: PreviewProvider {
     static var previews: some View {
         GetReadyPageView(
             onBegin: {},
+            onClose: {},
             cameraPosition: .front)
     }
 }
