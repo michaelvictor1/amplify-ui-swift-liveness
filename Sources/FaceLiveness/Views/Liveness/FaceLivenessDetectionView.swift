@@ -125,6 +125,11 @@ public struct FaceLivenessDetectorView: View {
         )
     }
 
+    private var isLivenessOnScreen: Bool {
+        if case .displayingLiveness = displayState { return true }
+        return false
+    }
+
     public var body: some View {
         ZStack {
             // `RotateDeviceView` covers the content but not the accessibility tree
@@ -138,7 +143,10 @@ public struct FaceLivenessDetectorView: View {
         // one full-screen fill for every state, so the app's own background never shows, even
         // around a state whose content is smaller than the screen
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(theme.colors.background.edgesIgnoringSafeArea(.all))
+        .background(
+            (isLivenessOnScreen ? Color.black : theme.colors.background)
+                .ignoresSafeArea()
+        )
         .background(
             InterfaceOrientationReader(
                 onTransition: orientationObserver.beginTransition(with:),
@@ -268,6 +276,7 @@ public struct FaceLivenessDetectorView: View {
                     CameraView(
                         faceLivenessDetectionViewModel: viewModel
                     )
+                    .ignoresSafeArea(edges: .bottom)
                 }
             )
             .onAppear {

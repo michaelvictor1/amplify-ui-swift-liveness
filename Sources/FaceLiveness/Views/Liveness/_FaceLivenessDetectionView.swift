@@ -51,6 +51,11 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black)
+        // The page behind this check is white. Without this, that white shows
+        // as a lip under the home indicator, including while the colors flash.
+        .ignoresSafeArea(edges: .bottom)
         .overlay {
             progressBelowOval
         }
