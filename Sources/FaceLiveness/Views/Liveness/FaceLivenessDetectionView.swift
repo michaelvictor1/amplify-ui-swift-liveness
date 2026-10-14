@@ -231,6 +231,14 @@ public struct FaceLivenessDetectorView: View {
                 .onAppear {
                     advanceIfWaitingOnPortrait()
                 }
+        case .displayingHowItWorks(let challenge):
+            HowItWorksView(onBegin: {
+                guard orientationObserver.decision == .proceed else { return }
+                displayState = .displayingGetReadyView(
+                    challenge,
+                    challengeOptions.camera(for: challenge)
+                )
+            })
         case .displayingGetReadyView(_, let cameraPosition):
             GetReadyPageView(
                 onBegin: {
@@ -276,7 +284,7 @@ public struct FaceLivenessDetectorView: View {
 
         let newState = disableStartView
         ? DisplayState.displayingLiveness
-        : DisplayState.displayingGetReadyView(challenge, challengeOptions.camera(for: challenge))
+        : DisplayState.displayingHowItWorks(challenge)
         guard self.displayState != newState else { return }
         self.displayState = newState
     }
@@ -381,6 +389,7 @@ enum DisplayState: Equatable {
     case awaitingChallengeType
     case awaitingCameraPermission(Challenge)
     case awaitingLivenessSession(Challenge)
+    case displayingHowItWorks(Challenge)
     case displayingGetReadyView(Challenge, LivenessCamera)
     case displayingLiveness
     
@@ -389,6 +398,8 @@ enum DisplayState: Equatable {
         case (.awaitingChallengeType, .awaitingChallengeType):
             return true
         case (let .awaitingLivenessSession(c1), let .awaitingLivenessSession(c2)):
+            return c1 == c2
+        case (let .displayingHowItWorks(c1), let .displayingHowItWorks(c2)):
             return c1 == c2
         case (let .displayingGetReadyView(c1, position1), let .displayingGetReadyView(c2, position2)):
             return c1 == c2 && position1 == position2
