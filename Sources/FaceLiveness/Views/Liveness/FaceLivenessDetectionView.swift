@@ -33,6 +33,8 @@ public struct FaceLivenessDetectorView: View {
     }
 
     let disableStartView: Bool
+    /// The app already showed the three-step page. Start at Center your face.
+    let skipHowItWorks: Bool
     let challengeOptions: ChallengeOptions
     var cancelButtonOptions = CancelButtonOptions()
     let onCompletion: (Result<Void, FaceLivenessDetectionError>) -> Void
@@ -44,11 +46,13 @@ public struct FaceLivenessDetectorView: View {
         credentialsProvider: AWSCredentialsProvider? = nil,
         region: String,
         disableStartView: Bool = false,
+        skipHowItWorks: Bool = false,
         challengeOptions: ChallengeOptions = .init(),
         isPresented: Binding<Bool>,
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void
     ) {        
         self.disableStartView = disableStartView
+        self.skipHowItWorks = skipHowItWorks
         self._isPresented = isPresented
         self.onCompletion = onCompletion
         self.challengeOptions = challengeOptions
@@ -90,12 +94,14 @@ public struct FaceLivenessDetectorView: View {
         credentialsProvider: AWSCredentialsProvider? = nil,
         region: String,
         disableStartView: Bool = false,
+        skipHowItWorks: Bool = false,
         challengeOptions: ChallengeOptions = .init(),
         isPresented: Binding<Bool>,
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         captureSession: LivenessCaptureSession
     ) {
         self.disableStartView = disableStartView
+        self.skipHowItWorks = skipHowItWorks
         self._isPresented = isPresented
         self.onCompletion = onCompletion
         self.challengeOptions = challengeOptions
@@ -296,7 +302,12 @@ public struct FaceLivenessDetectorView: View {
 
         let newState = disableStartView
         ? DisplayState.displayingLiveness
-        : DisplayState.displayingHowItWorks(challenge)
+        : (skipHowItWorks
+            ? DisplayState.displayingGetReadyView(
+                challenge,
+                challengeOptions.camera(for: challenge)
+            )
+            : DisplayState.displayingHowItWorks(challenge))
         guard self.displayState != newState else { return }
         self.displayState = newState
     }
