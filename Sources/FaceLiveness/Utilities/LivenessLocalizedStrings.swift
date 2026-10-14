@@ -35,6 +35,9 @@ enum LocalizedStrings {
     /// en = "A quick face check helps keep Vector real."
     static let how_it_works_subtitle = "amplify_ui_liveness_how_it_works_subtitle".localized()
 
+    /// en = "Takes about 30 seconds"
+    static let how_it_works_duration = "amplify_ui_liveness_how_it_works_duration".localized()
+
     /// en = "Before you begin:"
     static let how_it_works_before = "amplify_ui_liveness_how_it_works_before".localized()
 

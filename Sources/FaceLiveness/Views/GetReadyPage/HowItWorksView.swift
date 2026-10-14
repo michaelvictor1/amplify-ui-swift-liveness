@@ -34,6 +34,17 @@ struct HowItWorksView: View {
                             .foregroundColor(Self.secondaryText)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
+                        HStack(spacing: 6) {
+                            Image(systemName: "clock.fill")
+                                .font(.system(size: 12, weight: .regular))
+                            Text(LocalizedStrings.how_it_works_duration)
+                                .font(.system(size: 14, weight: .medium))
+                        }
+                        .foregroundColor(Self.secondaryText)
+                        .padding(.vertical, 6)
+                        .padding(.horizontal, 12)
+                        .background(Self.pillFill)
+                        .clipShape(Capsule())
                     }
                     .padding(.top, 32)
 
@@ -115,6 +126,12 @@ struct HowItWorksView: View {
         traits.userInterfaceStyle == .dark
             ? UIColor.hex("#98A2B3")
             : UIColor.hex("#475467")
+    })
+
+    private static let pillFill = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#1D2939")
+            : UIColor.hex("#F2F4F7")
     })
 
     private static let secondaryText = Color(uiColor: UIColor { traits in
