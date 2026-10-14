@@ -18,6 +18,7 @@
 "amplify_ui_liveness_how_it_works_step_one" = "Find a spot with good lighting.";
 "amplify_ui_liveness_how_it_works_step_two" = "Make sure your face is fully visible.";
 "amplify_ui_liveness_how_it_works_step_three" = "Remove sunglasses or anything covering your face.";
+"amplify_ui_liveness_how_it_works_legal" = "By continuing, you consent to a facial scan to confirm you’re a real person and match your profile photo. Vector never sees or stores your verification recording.";
 
 "amplify_ui_liveness_challenge_recording_indicator_label" = "REC";
 "amplify_ui_liveness_challenge_instruction_hold_face_during_countdown" = "Hold face position during countdown.";

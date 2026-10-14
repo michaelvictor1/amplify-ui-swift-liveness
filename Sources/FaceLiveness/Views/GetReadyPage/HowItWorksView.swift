@@ -66,10 +66,17 @@ struct HowItWorksView: View {
                 .padding(.bottom, 24)
             }
 
-            verifyButton
-                .padding(.horizontal, 24)
-                .padding(.top, 16)
-                .padding(.bottom, 16)
+            VStack(spacing: 20) {
+                Text(LocalizedStrings.how_it_works_legal)
+                    .font(.system(size: 12, weight: .regular))
+                    .foregroundColor(Self.tertiaryText)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                verifyButton
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 16)
+            .padding(.bottom, 16)
         }
         .background(theme.colors.background.ignoresSafeArea())
     }
@@ -103,6 +110,12 @@ struct HowItWorksView: View {
 
     private static let betaIcon = Color(uiColor: UIColor.hex("#9A16B0"))
     private static let betaWash = Color(uiColor: UIColor.hex("#FEF8FF"))
+
+    private static let tertiaryText = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#98A2B3")
+            : UIColor.hex("#475467")
+    })
 
     private static let secondaryText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
