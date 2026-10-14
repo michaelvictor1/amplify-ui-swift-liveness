@@ -53,7 +53,7 @@ struct HowItWorksView: View {
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(Self.secondaryText)
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
-                            HStack(alignment: .top, spacing: 12) {
+                            HStack(alignment: .center, spacing: 12) {
                                 ZStack {
                                     Circle()
                                         .fill(Self.betaWash)
@@ -65,7 +65,6 @@ struct HowItWorksView: View {
                                 Text(step.label)
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(theme.colors.onBackground)
-                                    .padding(.top, 4)
                                 Spacer(minLength: 0)
                             }
                             .frame(minHeight: 48)
