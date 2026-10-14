@@ -8,70 +8,55 @@
 import SwiftUI
 import UIKit
 
-/// Shown before Center your face. Same layout as the Vector Beta welcome:
-/// centered title, icon rows, a footer note, and a glass Verify Me.
+/// Shown before Center your face. Title, subtitle, three steps, and Verify Me.
 struct HowItWorksView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let onBegin: () -> Void
 
-    private let steps: [(symbol: String, title: String)] = [
-        ("face.smiling", LocalizedStrings.how_it_works_step_one_title),
-        ("arrow.left.and.right", LocalizedStrings.how_it_works_step_two_title),
-        ("light.max", LocalizedStrings.how_it_works_step_three_title),
+    private let steps = [
+        LocalizedStrings.how_it_works_step_one,
+        LocalizedStrings.how_it_works_step_two,
+        LocalizedStrings.how_it_works_step_three,
     ]
 
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(spacing: 32) {
-                    Text(LocalizedStrings.how_it_works_title)
-                        .font(.system(size: 24, weight: .semibold))
-                        .foregroundColor(theme.colors.onBackground)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 32)
+                    VStack(spacing: 12) {
+                        Text(LocalizedStrings.how_it_works_title)
+                            .font(.system(size: 24, weight: .semibold))
+                            .foregroundColor(theme.colors.onBackground)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                        Text(LocalizedStrings.how_it_works_subtitle)
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(Self.secondaryText)
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .padding(.top, 32)
 
-                    VStack(spacing: 20) {
-                        ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
-                            HStack(alignment: .top, spacing: 12) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Self.betaWash)
-                                        .frame(width: 48, height: 48)
-                                    Image(systemName: step.symbol)
-                                        .font(.system(size: 22, weight: .regular))
-                                        .foregroundColor(Self.betaIcon)
-                                }
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(step.title)
-                                        .font(.system(size: 16, weight: .medium))
-                                        .foregroundColor(theme.colors.onBackground)
-                                    Text(LocalizedStrings.how_it_works_placeholder)
-                                        .font(.system(size: 14, weight: .regular))
-                                        .foregroundColor(Self.secondaryText)
-                                }
-                                .padding(.top, 4)
-                                Spacer(minLength: 0)
-                            }
-                            .frame(minHeight: 48)
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text(LocalizedStrings.how_it_works_before)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Self.secondaryText)
+                        ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
+                            Text("\(index + 1). \(step)")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(theme.colors.onBackground)
                         }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
             }
 
-            VStack(spacing: 20) {
-                Text(LocalizedStrings.how_it_works_placeholder)
-                    .font(.system(size: 12, weight: .regular))
-                    .foregroundColor(Self.tertiaryText)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                verifyButton
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 16)
-            .padding(.bottom, 16)
+            verifyButton
+                .padding(.horizontal, 24)
+                .padding(.top, 16)
+                .padding(.bottom, 16)
         }
         .background(theme.colors.background.ignoresSafeArea())
     }
@@ -103,20 +88,9 @@ struct HowItWorksView: View {
         }
     }
 
-    /// text.beta.primary — beta.700 in light and dark.
-    private static let betaIcon = Color(uiColor: UIColor.hex("#9A16B0"))
-    /// bg.beta.wash — beta.50 in light and dark.
-    private static let betaWash = Color(uiColor: UIColor.hex("#FEF8FF"))
-
     private static let secondaryText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
             ? UIColor.hex("#D0D5DD")
             : UIColor.hex("#344054")
-    })
-
-    private static let tertiaryText = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor.hex("#98A2B3")
-            : UIColor.hex("#475467")
     })
 }

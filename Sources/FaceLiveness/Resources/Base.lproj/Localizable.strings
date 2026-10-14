@@ -12,11 +12,12 @@
 "amplify_ui_liveness_get_ready_photosensitivity_dialog_title" = "Photosensitivity warning";
 "amplify_ui_liveness_get_ready_photosensitivity_dialog_description" = "Some people may experience epileptic seizures when exposed to colored lights. Use caution if you, or anyone in your family, have an epileptic condition.";
 "amplify_ui_liveness_get_ready_begin_check" = "Verify Me";
-"amplify_ui_liveness_how_it_works_title" = "Placeholder title";
-"amplify_ui_liveness_how_it_works_step_one_title" = "Placeholder one";
-"amplify_ui_liveness_how_it_works_step_two_title" = "Placeholder two";
-"amplify_ui_liveness_how_it_works_step_three_title" = "Placeholder three";
-"amplify_ui_liveness_how_it_works_placeholder" = "Placeholder text.";
+"amplify_ui_liveness_how_it_works_title" = "Let’s make sure it’s you";
+"amplify_ui_liveness_how_it_works_subtitle" = "A quick face check helps keep Vector real.";
+"amplify_ui_liveness_how_it_works_before" = "Before you begin:";
+"amplify_ui_liveness_how_it_works_step_one" = "Find a spot with good lighting.";
+"amplify_ui_liveness_how_it_works_step_two" = "Make sure your face is fully visible.";
+"amplify_ui_liveness_how_it_works_step_three" = "Remove sunglasses or anything covering your face.";
 
 "amplify_ui_liveness_challenge_recording_indicator_label" = "REC";
 "amplify_ui_liveness_challenge_instruction_hold_face_during_countdown" = "Hold face position during countdown.";

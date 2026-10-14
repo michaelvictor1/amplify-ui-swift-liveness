@@ -29,20 +29,23 @@ enum LocalizedStrings {
     /// en = "Verify Me"
     static let get_ready_begin_check = "amplify_ui_liveness_get_ready_begin_check".localized()
 
-    /// en = "Placeholder title"
+    /// en = "Let’s make sure it’s you"
     static let how_it_works_title = "amplify_ui_liveness_how_it_works_title".localized()
 
-    /// en = "Placeholder one"
-    static let how_it_works_step_one_title = "amplify_ui_liveness_how_it_works_step_one_title".localized()
+    /// en = "A quick face check helps keep Vector real."
+    static let how_it_works_subtitle = "amplify_ui_liveness_how_it_works_subtitle".localized()
 
-    /// en = "Placeholder two"
-    static let how_it_works_step_two_title = "amplify_ui_liveness_how_it_works_step_two_title".localized()
+    /// en = "Before you begin:"
+    static let how_it_works_before = "amplify_ui_liveness_how_it_works_before".localized()
 
-    /// en = "Placeholder three"
-    static let how_it_works_step_three_title = "amplify_ui_liveness_how_it_works_step_three_title".localized()
+    /// en = "Find a spot with good lighting."
+    static let how_it_works_step_one = "amplify_ui_liveness_how_it_works_step_one".localized()
 
-    /// en = "Placeholder text."
-    static let how_it_works_placeholder = "amplify_ui_liveness_how_it_works_placeholder".localized()
+    /// en = "Make sure your face is fully visible."
+    static let how_it_works_step_two = "amplify_ui_liveness_how_it_works_step_two".localized()
+
+    /// en = "Remove sunglasses or anything covering your face."
+    static let how_it_works_step_three = "amplify_ui_liveness_how_it_works_step_three".localized()
 
     /// en = "REC"
     static let challenge_recording_indicator_label = "amplify_ui_liveness_challenge_recording_indicator_label".localized()
