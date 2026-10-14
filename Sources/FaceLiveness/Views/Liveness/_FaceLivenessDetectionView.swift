@@ -63,7 +63,7 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             GeometryReader { geo in
                 let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
                 let barHeight: CGFloat = 7
-                let y = preview.minY + viewModel.ovalRect.maxY + 16 + barHeight / 2
+                let y = preview.minY + viewModel.ovalRect.maxY + 24 + barHeight / 2
                 ProgressBarView(percentage: percentage)
                     .position(x: geo.size.width / 2, y: y)
             }
