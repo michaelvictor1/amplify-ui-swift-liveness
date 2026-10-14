@@ -12,6 +12,7 @@ import UIKit
 struct HowItWorksView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
     let onBegin: () -> Void
+    let onClose: () -> Void
 
     private let steps: [(symbol: String, label: String)] = [
         ("sun.max.fill", LocalizedStrings.how_it_works_step_one),
@@ -20,6 +21,7 @@ struct HowItWorksView: View {
     ]
 
     var body: some View {
+        ZStack(alignment: .topTrailing) {
         VStack(spacing: 0) {
             VStack(spacing: 32) {
                     VStack(spacing: 12) {
@@ -45,7 +47,7 @@ struct HowItWorksView: View {
                         .background(Self.pillFill)
                         .clipShape(Capsule())
                     }
-                    .padding(.top, 32)
+                    .padding(.top, 64)
 
                     VStack(alignment: .leading, spacing: 20) {
                         Text(LocalizedStrings.how_it_works_before)
@@ -89,6 +91,10 @@ struct HowItWorksView: View {
             .padding(.bottom, 16)
         }
         .background(theme.colors.background.ignoresSafeArea())
+            CloseButton(action: onClose)
+                .padding(.top, 16)
+                .padding(.trailing, 16)
+        }
     }
 
     @ViewBuilder

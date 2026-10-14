@@ -232,13 +232,16 @@ public struct FaceLivenessDetectorView: View {
                     advanceIfWaitingOnPortrait()
                 }
         case .displayingHowItWorks(let challenge):
-            HowItWorksView(onBegin: {
-                guard orientationObserver.decision == .proceed else { return }
-                displayState = .displayingGetReadyView(
-                    challenge,
-                    challengeOptions.camera(for: challenge)
-                )
-            })
+            HowItWorksView(
+                onBegin: {
+                    guard orientationObserver.decision == .proceed else { return }
+                    displayState = .displayingGetReadyView(
+                        challenge,
+                        challengeOptions.camera(for: challenge)
+                    )
+                },
+                onClose: viewModel.closeButtonAction
+            )
         case .displayingGetReadyView(_, let cameraPosition):
             GetReadyPageView(
                 onBegin: {
