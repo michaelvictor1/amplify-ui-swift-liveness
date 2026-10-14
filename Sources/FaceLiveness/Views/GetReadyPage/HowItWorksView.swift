@@ -38,7 +38,7 @@ struct HowItWorksView: View {
                             Image(systemName: "clock.fill")
                                 .font(.system(size: 12, weight: .regular))
                             Text(LocalizedStrings.how_it_works_duration)
-                                .font(.system(size: 14, weight: .medium))
+                                .font(.system(size: 14, weight: .regular))
                         }
                         .foregroundColor(Self.secondaryText)
                         .padding(.vertical, 6)
