@@ -56,11 +56,11 @@ struct HowItWorksView: View {
                             HStack(alignment: .center, spacing: 12) {
                                 ZStack {
                                     Circle()
-                                        .fill(Self.betaWash)
+                                        .fill(Self.brandWash)
                                         .frame(width: 48, height: 48)
                                     Image(systemName: step.symbol)
                                         .font(.system(size: 22, weight: .regular))
-                                        .foregroundColor(Self.betaIcon)
+                                        .foregroundColor(Self.brandIcon)
                                 }
                                 Text(step.label)
                                     .font(.system(size: 16, weight: .medium))
@@ -119,8 +119,16 @@ struct HowItWorksView: View {
         }
     }
 
-    private static let betaIcon = Color(uiColor: UIColor.hex("#9A16B0"))
-    private static let betaWash = Color(uiColor: UIColor.hex("#FEF8FF"))
+    private static let brandIcon = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#476EFF")
+            : UIColor.hex("#315CFF")
+    })
+    private static let brandWash = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#000B37")
+            : UIColor.hex("#EFF1FA")
+    })
 
     private static let tertiaryText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
