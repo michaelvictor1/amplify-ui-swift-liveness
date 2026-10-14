@@ -21,8 +21,7 @@ struct HowItWorksView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: 32) {
+            VStack(spacing: 32) {
                     VStack(spacing: 12) {
                         Text(LocalizedStrings.how_it_works_title)
                             .font(.system(size: 24, weight: .semibold))
@@ -75,7 +74,7 @@ struct HowItWorksView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
-            }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
             VStack(spacing: 20) {
                 Text(LocalizedStrings.how_it_works_legal)
