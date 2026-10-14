@@ -26,13 +26,16 @@ struct HowItWorksView: View {
             VStack(spacing: 32) {
                     VStack(spacing: 8) {
                         Text(LocalizedStrings.how_it_works_title)
-                            .font(.system(size: 24, weight: .semibold))
+                            .font(.system(size: 30, weight: .semibold))
+                            .kerning(-0.6)
+                            .lineSpacing(Self.extraLeading(size: 30, weight: .semibold, lineHeight: 38))
                             .foregroundColor(theme.colors.onBackground)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
                         Text(LocalizedStrings.how_it_works_subtitle)
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(Self.secondaryText)
+                            .font(.system(size: 18, weight: .medium))
+                            .lineSpacing(Self.extraLeading(size: 18, weight: .medium, lineHeight: 28))
+                            .foregroundColor(Self.supportText)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
                     }
@@ -109,6 +112,18 @@ struct HowItWorksView: View {
     private static let tertiaryText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
             ? UIColor.hex("#98A2B3")
+            : UIColor.hex("#475467")
+    })
+
+    /// Matches onboarding `text.secondary` (`displaySm` title, `textLg` support).
+    private static func extraLeading(size: CGFloat, weight: UIFont.Weight, lineHeight: CGFloat) -> CGFloat {
+        let natural = UIFont.systemFont(ofSize: size, weight: weight).lineHeight
+        return max(0, lineHeight - natural)
+    }
+
+    private static let supportText = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#D0D5DD")
             : UIColor.hex("#475467")
     })
 

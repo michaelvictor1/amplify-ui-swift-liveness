@@ -32,7 +32,7 @@ enum LocalizedStrings {
     /// en = "I’m Ready"
     static let get_ready_im_ready = "amplify_ui_liveness_get_ready_im_ready".localized()
 
-    /// en = "Let’s make sure it’s you"
+    /// en = "Verify it’s you"
     static let how_it_works_title = "amplify_ui_liveness_how_it_works_title".localized()
 
     /// en = "A quick face check helps keep Vector real."
