@@ -16,16 +16,19 @@ struct LivenessPrimaryButton: View {
 
     var body: some View {
         if #available(iOS 26, *) {
+            // The 58pt frame and the hit shape have to live inside the label.
+            // A plain button only taps its text, so a press on the rest of the
+            // pill lights the glass and does nothing until a later tap hits the words.
             Button(action: action) {
                 Text(title)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(theme.colors.onPrimary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 58)
+                    .contentShape(Capsule())
+                    .glassEffect(.regular.tint(theme.colors.primary).interactive(), in: .capsule)
             }
             .buttonStyle(.plain)
-            .frame(maxWidth: .infinity)
-            .frame(height: 58)
-            .glassEffect(.regular.tint(theme.colors.primary).interactive(), in: .capsule)
             .disabled(disabled)
         } else {
             Button(action: action) {
