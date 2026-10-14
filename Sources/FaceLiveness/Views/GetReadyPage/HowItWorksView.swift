@@ -70,7 +70,7 @@ struct HowItWorksView: View {
             VStack(spacing: 20) {
                 Text(LocalizedStrings.how_it_works_legal)
                     .font(.system(size: 12, weight: .regular))
-                    .lineSpacing(8)
+                    .lineSpacing(4)
                     .foregroundColor(Self.tertiaryText)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
