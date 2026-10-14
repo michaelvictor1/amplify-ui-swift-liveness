@@ -36,7 +36,7 @@ struct HowItWorksView: View {
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
                     }
-                    .padding(.top, 64)
+                    .padding(.top, 80)
 
                     VStack(alignment: .leading, spacing: 20) {
                         Text(LocalizedStrings.how_it_works_before)
@@ -87,31 +87,11 @@ struct HowItWorksView: View {
         }
     }
 
-    @ViewBuilder
     private var verifyButton: some View {
-        if #available(iOS 26, *) {
-            Button(action: onBegin) {
-                Text(LocalizedStrings.get_ready_begin_check)
-                    .font(theme.fonts.body)
-                    .fontWeight(.semibold)
-                    .foregroundColor(theme.colors.onPrimary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-            }
-            .buttonStyle(.glassProminent)
-            .buttonBorderShape(.capsule)
-            .tint(theme.colors.primary)
-        } else {
-            Button(action: onBegin) {
-                Text(LocalizedStrings.get_ready_begin_check)
-                    .font(theme.fonts.body)
-                    .foregroundColor(theme.colors.onPrimary)
-                    .frame(maxWidth: .infinity)
-            }
-            .frame(height: 52)
-            ._background { theme.colors.primary }
-            .cornerRadius(14)
-        }
+        LivenessPrimaryButton(
+            title: LocalizedStrings.get_ready_begin_check,
+            action: onBegin
+        )
     }
 
     private static let brandIcon = Color(uiColor: UIColor { traits in
