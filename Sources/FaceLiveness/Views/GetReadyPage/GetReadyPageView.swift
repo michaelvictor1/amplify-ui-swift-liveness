@@ -64,7 +64,7 @@ struct GetReadyPageView: View {
     private var beginCheckButton: some View {
         if #available(iOS 26, *) {
             Button(action: onBegin) {
-                Text(LocalizedStrings.get_ready_begin_check)
+                Text(LocalizedStrings.get_ready_im_ready)
                     .font(theme.fonts.body)
                     .fontWeight(.semibold)
                     .foregroundColor(theme.colors.onPrimary)
@@ -79,7 +79,7 @@ struct GetReadyPageView: View {
             .padding(.bottom, 16)
         } else {
             Button(action: onBegin) {
-                Text(LocalizedStrings.get_ready_begin_check)
+                Text(LocalizedStrings.get_ready_im_ready)
                     .font(theme.fonts.body)
                     .foregroundColor(theme.colors.onPrimary)
                     .frame(maxWidth: .infinity)

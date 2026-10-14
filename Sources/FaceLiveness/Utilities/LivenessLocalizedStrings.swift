@@ -29,6 +29,9 @@ enum LocalizedStrings {
     /// en = "Verify Me"
     static let get_ready_begin_check = "amplify_ui_liveness_get_ready_begin_check".localized()
 
+    /// en = "I’m Ready"
+    static let get_ready_im_ready = "amplify_ui_liveness_get_ready_im_ready".localized()
+
     /// en = "Let’s make sure it’s you"
     static let how_it_works_title = "amplify_ui_liveness_how_it_works_title".localized()
 

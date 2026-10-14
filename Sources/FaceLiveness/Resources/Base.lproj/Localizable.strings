@@ -12,6 +12,7 @@
 "amplify_ui_liveness_get_ready_photosensitivity_dialog_title" = "Photosensitivity warning";
 "amplify_ui_liveness_get_ready_photosensitivity_dialog_description" = "Some people may experience epileptic seizures when exposed to colored lights. Use caution if you, or anyone in your family, have an epileptic condition.";
 "amplify_ui_liveness_get_ready_begin_check" = "Verify Me";
+"amplify_ui_liveness_get_ready_im_ready" = "I’m Ready";
 "amplify_ui_liveness_how_it_works_title" = "Let’s make sure it’s you";
 "amplify_ui_liveness_how_it_works_subtitle" = "A quick face check helps keep Vector real.";
 "amplify_ui_liveness_how_it_works_before" = "A few quick tips:";
