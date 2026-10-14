@@ -33,8 +33,8 @@ struct InstructionContainerView: View {
             line(reason.localizedValue)
 
         case .completedDisplayingFreshness, .completedNoLightCheck:
-            line(LocalizedStrings.challenge_verifying, color: .white)
-                .onAppear { announce(LocalizedStrings.challenge_verifying) }
+            // The white cover announces this. A visible line would sit on that field.
+            EmptyView()
 
         case .faceMatched:
             if let challenge = viewModel.challengeReceived,

@@ -23,6 +23,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     weak var livenessViewControllerDelegate: FaceLivenessViewControllerPresenter?
     var captureSession: LivenessCaptureSession?
     var closeButtonAction: () -> Void
+    /// Puts the screen brightness back before the white verifying field fades in.
+    var restoreBrightnessForVerifying: (() -> Void)?
     /// Center-your-face oval in screen coordinates, so the scanning oval can grow from it.
     var getReadyOvalInGlobal: CGRect = .zero
     let videoChunker: VideoChunker
@@ -418,8 +420,10 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         // colors start, so the face match sent to the service doesn't end the moment it begins.
         // The face guide stays up until then, so the user holds still for it.
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            self?.livenessState.completedNoLightCheck()
-            self?.finishVideo()
+            guard let self, !self.livenessState.hasEnded else { return }
+            self.livenessViewControllerDelegate?.beginVerifyingCover()
+            self.livenessState.completedNoLightCheck()
+            self.finishVideo()
         }
     }
 

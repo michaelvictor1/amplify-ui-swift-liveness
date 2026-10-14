@@ -30,6 +30,12 @@ public struct FaceLivenessDetectorView: View {
     private final class ScreenState {
         var originalBrightness: CGFloat?
         var originalIsIdleTimerDisabled: Bool?
+
+        func restoreBrightness() {
+            guard let originalBrightness else { return }
+            UIScreen.main.brightness = originalBrightness
+            self.originalBrightness = nil
+        }
     }
 
     let disableStartView: Bool
@@ -287,6 +293,10 @@ public struct FaceLivenessDetectorView: View {
             )
             .onAppear {
                 setScreenForCheck()
+                let screen = screenState
+                viewModel.restoreBrightnessForVerifying = {
+                    screen.restoreBrightness()
+                }
             }
             .onDisappear() {
                 viewModel.stopRecording()
@@ -351,10 +361,7 @@ public struct FaceLivenessDetectorView: View {
     /// the hierarchy, so it runs on every exit path (success, cancel, error).
     private func restoreScreen() {
         DispatchQueue.main.async {
-            if let originalBrightness = screenState.originalBrightness {
-                UIScreen.main.brightness = originalBrightness
-                screenState.originalBrightness = nil
-            }
+            screenState.restoreBrightness()
             if let originalIsIdleTimerDisabled = screenState.originalIsIdleTimerDisabled {
                 UIApplication.shared.isIdleTimerDisabled = originalIsIdleTimerDisabled
                 screenState.originalIsIdleTimerDisabled = nil

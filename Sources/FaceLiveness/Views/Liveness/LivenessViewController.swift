@@ -55,8 +55,8 @@ final class _LivenessViewController: UIViewController {
         showStartingOvalIfNeeded()
     }
 
-    /// Removes the face guide once the check completes (or ends any other way), so "Verifying"
-    /// and the final frame show on black.
+    /// Removes the face guide once the check completes (or ends any other way).
+    /// The verifying cover, not the camera, is what shows after that.
     private func removeFaceGuideWhenCheckEnds() {
         faceGuideSubscription = viewModel.$livenessState
             .map(\.isFaceGuideDisplayed)
@@ -138,6 +138,8 @@ final class _LivenessViewController: UIViewController {
     var hasSentEmptyFinalVideoEvent = false
     var ovalView: OvalView?
     private var faceGuideSubscription: AnyCancellable?
+    /// White field shown after the lights, so the final camera frame stays hidden.
+    private var verifyingCover: UIView?
 
 
     required init?(coder: NSCoder) { fatalError() }
@@ -146,15 +148,68 @@ final class _LivenessViewController: UIViewController {
 extension _LivenessViewController: FaceLivenessViewControllerPresenter {
     func displaySingleFrame(uiImage: UIImage) {
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            guard let previewLayer = self.previewLayer else { return }
-            let imageView = UIImageView(image: uiImage)
-            imageView.frame = previewLayer.frame
-            self.view.addSubview(imageView)
-            (previewLayer as? AVCaptureVideoPreviewLayer)?.session = nil
-            previewLayer.removeFromSuperlayer()
-            self.viewModel.stopRecording()
+            // The still is only a display frame. The video is already finished.
+            _ = uiImage
+            self?.beginVerifyingCover()
         }
+    }
+
+    /// White field and a centered spinner, faded over the last color (or the
+    /// live camera, when there were no lights). The final frame is never shown.
+    func beginVerifyingCover() {
+        let present = { [weak self] in
+            guard let self, self.verifyingCover == nil else { return }
+            self.viewModel.restoreBrightnessForVerifying?()
+            // The color overlay is translucent during the lights. Make it solid
+            // so the fade does not show the camera through it.
+            self.freshnessView.alpha = 1
+
+            let cover = UIView(frame: self.view.bounds)
+            cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            cover.backgroundColor = .white
+            cover.alpha = 0
+            cover.isAccessibilityElement = true
+            cover.accessibilityLabel = LocalizedStrings.challenge_verifying
+
+            let spinner = UIActivityIndicatorView(style: .large)
+            spinner.color = .hex("#0470E2")
+            spinner.translatesAutoresizingMaskIntoConstraints = false
+            spinner.startAnimating()
+            cover.addSubview(spinner)
+            NSLayoutConstraint.activate([
+                spinner.centerXAnchor.constraint(equalTo: cover.centerXAnchor),
+                spinner.centerYAnchor.constraint(equalTo: cover.centerYAnchor),
+            ])
+
+            self.view.addSubview(cover)
+            self.verifyingCover = cover
+            UIAccessibility.post(
+                notification: .announcement,
+                argument: LocalizedStrings.challenge_verifying
+            )
+
+            let fade: TimeInterval = UIAccessibility.isReduceMotionEnabled ? 0.12 : 0.32
+            UIView.animate(withDuration: fade, delay: 0, options: [.curveEaseInOut]) {
+                cover.alpha = 1
+            } completion: { [weak self] _ in
+                self?.stopPreview()
+            }
+        }
+        if Thread.isMainThread {
+            present()
+        } else {
+            DispatchQueue.main.async(execute: present)
+        }
+    }
+
+    /// Stops the camera once the white field is up, so a frozen frame cannot
+    /// show through the fade.
+    private func stopPreview() {
+        guard let previewLayer else { return }
+        (previewLayer as? AVCaptureVideoPreviewLayer)?.session = nil
+        previewLayer.removeFromSuperlayer()
+        self.previewLayer = nil
+        viewModel.stopRecording()
     }
 
     func displayFreshness(colorSequences: [FaceLivenessSession.DisplayColor]) {
@@ -169,12 +224,11 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
             onNewColor: { [weak self] colorEvent in
                 self?.viewModel.sendColorDisplayedEvent(colorEvent)
             },
-            onComplete: { [weak self] in
-                guard let self else { return }
-                self.freshnessView.removeFromSuperview()
-
-                self.viewModel.handleFreshnessComplete()
-            }
+        onComplete: { [weak self] in
+            guard let self else { return }
+            self.beginVerifyingCover()
+            self.viewModel.handleFreshnessComplete()
+        }
         )
     }
 

@@ -79,7 +79,8 @@ class Freshness {
         }
 
         if colorIndex >= colorSequences.count {
-            view.clearColors()
+            // Leave the last color up. The check fades that to white; clearing
+            // here would reveal the camera for a frame.
             onComplete()
             return
         }
@@ -143,9 +144,11 @@ class Freshness {
                 msElapsed += self.tickRate
                 if msElapsed >= Double(currentFreshnessColor.duration / 1_000) {
                     timer.invalidate()
-                    view.fractionalRectangleBottom?.constant = 0
-                    view.oldRectangleTop?.constant = 0
-                    if colorIndex < self.colorSequences.count - 1 {
+                    let isLast = colorIndex >= self.colorSequences.count - 1
+                    // Keep the last color on screen so the fade to white covers it.
+                    if !isLast {
+                        view.fractionalRectangleBottom?.constant = 0
+                        view.oldRectangleTop?.constant = 0
                         onNewColor(
                             .init(
                                 currentColor: self.colorSequences[colorIndex + 1],

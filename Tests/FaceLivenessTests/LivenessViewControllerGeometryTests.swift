@@ -240,7 +240,7 @@ final class LivenessViewControllerGeometryTests: XCTestCase {
 
     /// Given: A controller showing the face guide during the freshness check
     /// When: The check completes
-    /// Then: The guide is removed, so "Verifying" and the final frame show on black
+    /// Then: The guide is removed before the white verifying cover
     func testFaceGuideIsRemovedWhenTheCheckCompletes() throws {
         for completed in [LivenessStateMachine.State.completedDisplayingFreshness, .completedNoLightCheck] {
             layout(to: window)
@@ -256,5 +256,25 @@ final class LivenessViewControllerGeometryTests: XCTestCase {
             XCTAssertNil(viewController.ovalView, "\(completed)")
             XCTAssertNil(ovalView.superview, "\(completed)")
         }
+    }
+
+    /// Given: The writer has a final camera frame
+    /// When: Verifying starts
+    /// Then: A white cover with a spinner is up, and that frame is not shown
+    func testVerifyingCoverHidesTheFinalFrame() {
+        layout(to: window)
+        viewController.displaySingleFrame(uiImage: UIImage())
+
+        let appeared = expectation(description: "cover")
+        DispatchQueue.main.async { appeared.fulfill() }
+        wait(for: [appeared], timeout: 1)
+
+        let covers = viewController.view.subviews.filter { $0.backgroundColor == UIColor.white }
+        XCTAssertEqual(covers.count, 1)
+        XCTAssertFalse(
+            viewController.view.subviews.contains { $0 is UIImageView },
+            "the final frame must not be shown"
+        )
+        XCTAssertNotNil(covers.first?.subviews.first { $0 is UIActivityIndicatorView })
     }
 }

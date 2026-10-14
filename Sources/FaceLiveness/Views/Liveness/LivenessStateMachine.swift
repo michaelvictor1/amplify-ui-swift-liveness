@@ -117,7 +117,7 @@ struct LivenessStateMachine {
 
     /// Whether the face guide (the white overlay with the oval cut out) is on screen: from when
     /// the oval is displayed through the freshness (color) check. It's removed once the check
-    /// completes, before "Verifying".
+    /// completes, before the white verifying cover.
     var isFaceGuideDisplayed: Bool {
         switch state {
         case .recording(ovalDisplayed: true),

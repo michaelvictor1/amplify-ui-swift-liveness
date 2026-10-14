@@ -13,5 +13,6 @@ protocol FaceLivenessViewControllerPresenter: AnyObject {
     func displayFreshness(colorSequences: [FaceLivenessSession.DisplayColor])
     func stopFreshness()
     func displaySingleFrame(uiImage: UIImage)
+    func beginVerifyingCover()
     func completeNoLightCheck()
 }
