@@ -12,6 +12,7 @@ import UIKit
 /// Light track is brand.100, dark track is brand.700, fill is brand primary.
 struct ProgressBarView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let percentage: Double
 
     private let trackWidth: CGFloat = 140
@@ -25,6 +26,7 @@ struct ProgressBarView: View {
             Capsule()
                 .fill(theme.colors.primary)
                 .frame(width: trackWidth * clamped, height: trackHeight)
+                .animation(reduceMotion ? nil : .easeOut(duration: 0.4), value: percentage)
         }
         .frame(maxWidth: .infinity)
         .accessibilityHidden(true)
