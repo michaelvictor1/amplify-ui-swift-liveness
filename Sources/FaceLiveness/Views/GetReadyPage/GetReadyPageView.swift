@@ -13,18 +13,21 @@ struct GetReadyPageView: View {
     let beginCheckButtonDisabled: Bool
     let onBegin: () -> Void
     let onClose: () -> Void
+    let onReadyOval: (CGRect) -> Void
     let cameraPosition: LivenessCamera
     let sharedCaptureSession: LivenessCaptureSession?
     
     init(
         onBegin: @escaping () -> Void,
         onClose: @escaping () -> Void,
+        onReadyOval: @escaping (CGRect) -> Void = { _ in },
         beginCheckButtonDisabled: Bool = false,
         cameraPosition: LivenessCamera,
         sharedCaptureSession: LivenessCaptureSession? = nil
     ) {
         self.onBegin = onBegin
         self.onClose = onClose
+        self.onReadyOval = onReadyOval
         self.beginCheckButtonDisabled = beginCheckButtonDisabled
         self.cameraPosition = cameraPosition
         self.sharedCaptureSession = sharedCaptureSession
@@ -33,7 +36,11 @@ struct GetReadyPageView: View {
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
-                CameraPreviewView(cameraPosition: cameraPosition, sharedCaptureSession: sharedCaptureSession)
+                CameraPreviewView(
+                    cameraPosition: cameraPosition,
+                    sharedCaptureSession: sharedCaptureSession,
+                    onReadyOval: onReadyOval
+                )
                 VStack(spacing: 12) {
                     HStack {
                         Spacer(minLength: 0)

@@ -23,6 +23,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     weak var livenessViewControllerDelegate: FaceLivenessViewControllerPresenter?
     var captureSession: LivenessCaptureSession?
     var closeButtonAction: () -> Void
+    /// Center-your-face oval in screen coordinates, so the scanning oval can grow from it.
+    var getReadyOvalInGlobal: CGRect = .zero
     let videoChunker: VideoChunker
     let sessionID: String
     var livenessService: LivenessService?

@@ -241,6 +241,7 @@ public struct FaceLivenessDetectorView: View {
                     displayState = .displayingLiveness
                 },
                 onClose: viewModel.closeButtonAction,
+                onReadyOval: { viewModel.getReadyOvalInGlobal = $0 },
                 beginCheckButtonDisabled: false,
                 cameraPosition: cameraPosition,
                 sharedCaptureSession: viewModel.captureSession

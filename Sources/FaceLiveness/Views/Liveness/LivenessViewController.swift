@@ -50,6 +50,11 @@ final class _LivenessViewController: UIViewController {
         removeFaceGuideWhenCheckEnds()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        showStartingOvalIfNeeded()
+    }
+
     /// Removes the face guide once the check completes (or ends any other way), so "Verifying"
     /// and the final frame show on black.
     private func removeFaceGuideWhenCheckEnds() {
@@ -188,23 +193,48 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
 
-            // drop any previous oval so a redraw replaces it rather than layering over it
-            self.ovalView?.removeFromSuperview()
-
-            // The guide covers the whole screen, not just the camera preview, so no black shows
-            // above or below the preview. It follows the view's size and places the oval, which
-            // is relative to the preview, wherever the preview sits.
-            let ovalView = OvalView(frame: self.view.bounds, ovalFrame: ovalRect)
-            ovalView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            self.ovalView = ovalView
-            self.view.insertSubview(
-                ovalView,
-                belowSubview: self.freshnessView
-            )
+            let firstServiceOval = !self.ovalExists
+            let ovalView = self.installOvalView(ovalFrame: ovalRect)
+            ovalView.ovalFrame = ovalRect
+            let end = ovalView.ovalFrameInView
+            if firstServiceOval {
+                let start = ovalView.cutoutInView ?? self.getReadyOvalInView() ?? end
+                ovalView.growCutout(from: start, to: end)
+            } else {
+                ovalView.showCutout(end)
+            }
 
             self.ovalRect = ovalRect
             self.ovalExists = true
         }
+    }
+
+    /// Keeps the Center your face oval up so it can grow into the scanning oval.
+    private func showStartingOvalIfNeeded() {
+        guard ovalView == nil, let start = getReadyOvalInView() else { return }
+        let ovalView = installOvalView(ovalFrame: .zero)
+        ovalView.showCutout(start)
+    }
+
+    private func installOvalView(ovalFrame: CGRect) -> OvalView {
+        if let ovalView {
+            ovalView.frame = view.bounds
+            return ovalView
+        }
+        let ovalView = OvalView(frame: view.bounds, ovalFrame: ovalFrame)
+        ovalView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.ovalView = ovalView
+        view.insertSubview(ovalView, belowSubview: freshnessView)
+        return ovalView
+    }
+
+    /// Center-your-face ellipse in this view's coordinates.
+    private func getReadyOvalInView() -> CGRect? {
+        let global = viewModel.getReadyOvalInGlobal
+        guard global.width > 1, view.window != nil else { return nil }
+        let local = view.convert(global, from: nil)
+        guard view.bounds.intersects(local) else { return nil }
+        return local
     }
     
     func completeNoLightCheck() {

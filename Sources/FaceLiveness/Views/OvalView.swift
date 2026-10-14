@@ -15,7 +15,10 @@ import UIKit
 /// than drawing a bitmap, so resizing doesn't reallocate a screen-sized backing store.
 class OvalView: UIView {
     /// The oval, relative to the camera preview's origin.
-    let ovalFrame: CGRect
+    var ovalFrame: CGRect
+    /// The cutout currently drawn, in this view's coordinates.
+    private(set) var cutoutInView: CGRect?
+    private var growing = false
 
     private let outlineLayer = CAShapeLayer()
     private let outlineMask = CAShapeLayer()
@@ -51,22 +54,76 @@ class OvalView: UIView {
         return ovalFrame.offsetBy(dx: previewOrigin.x, dy: previewOrigin.y)
     }
 
+    /// Draws `rect` with no animation. `rect` is in this view's coordinates.
+    func showCutout(_ rect: CGRect) {
+        cutoutInView = rect
+        apply(rect, animatedFrom: nil)
+    }
+
+    /// Grows the cutout from `start` to `end`. Both rects are in this view's coordinates.
+    /// Face matching does not read this path — it uses the final oval rect.
+    func growCutout(from start: CGRect, to end: CGRect) {
+        cutoutInView = end
+        guard start.width > 1, !nearlyEqual(start, end) else {
+            apply(end, animatedFrom: nil)
+            return
+        }
+        growing = true
+        apply(end, animatedFrom: start)
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard !growing, let rect = cutoutInView, rect.width > 1 else { return }
+        apply(rect, animatedFrom: nil)
+    }
 
-        let oval = UIBezierPath(ovalIn: ovalFrameInView)
-        let overlay = UIBezierPath(rect: bounds)
-        overlay.append(oval)
+    private func apply(_ rect: CGRect, animatedFrom start: CGRect?) {
+        let endOval = UIBezierPath(ovalIn: rect)
+        let endOverlay = UIBezierPath(rect: bounds)
+        endOverlay.append(endOval)
 
-        // resizes should move the guide, not animate it
         CATransaction.begin()
         CATransaction.setDisableActions(true)
-        overlayLayer.path = overlay.cgPath
+        overlayLayer.path = endOverlay.cgPath
         outlineLayer.frame = bounds
-        outlineLayer.path = oval.cgPath
+        outlineLayer.path = endOval.cgPath
         outlineMask.frame = bounds
-        outlineMask.path = overlay.cgPath
+        outlineMask.path = endOverlay.cgPath
         CATransaction.commit()
+
+        guard let start else { return }
+        let startOval = UIBezierPath(ovalIn: start)
+        let startOverlay = UIBezierPath(rect: bounds)
+        startOverlay.append(startOval)
+
+        let grow = CABasicAnimation(keyPath: "path")
+        grow.duration = 0.45
+        grow.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        grow.fromValue = startOverlay.cgPath
+        grow.toValue = endOverlay.cgPath
+
+        let stroke = CABasicAnimation(keyPath: "path")
+        stroke.duration = grow.duration
+        stroke.timingFunction = grow.timingFunction
+        stroke.fromValue = startOval.cgPath
+        stroke.toValue = endOval.cgPath
+
+        CATransaction.begin()
+        CATransaction.setCompletionBlock { [weak self] in
+            self?.growing = false
+        }
+        overlayLayer.add(grow, forKey: "grow")
+        outlineMask.add(grow, forKey: "grow")
+        outlineLayer.add(stroke, forKey: "grow")
+        CATransaction.commit()
+    }
+
+    private func nearlyEqual(_ a: CGRect, _ b: CGRect) -> Bool {
+        abs(a.minX - b.minX) < 1
+            && abs(a.minY - b.minY) < 1
+            && abs(a.width - b.width) < 1
+            && abs(a.height - b.height) < 1
     }
 
     required init?(coder: NSCoder) { nil }
