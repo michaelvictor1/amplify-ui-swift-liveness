@@ -24,7 +24,7 @@ struct HowItWorksView: View {
         ZStack(alignment: .topTrailing) {
         VStack(spacing: 0) {
             VStack(spacing: 32) {
-                    VStack(spacing: 12) {
+                    VStack(spacing: 8) {
                         Text(LocalizedStrings.how_it_works_title)
                             .font(.system(size: 24, weight: .semibold))
                             .foregroundColor(theme.colors.onBackground)
@@ -60,7 +60,7 @@ struct HowItWorksView: View {
                             .frame(minHeight: 48)
                         }
                     }
-                    .padding(.top, 24)
+                    .padding(.top, 16)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .padding(.horizontal, 24)
