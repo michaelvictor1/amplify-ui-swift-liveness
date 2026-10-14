@@ -17,7 +17,7 @@ struct HowItWorksView: View {
     private let steps: [(symbol: String, label: String)] = [
         ("sun.max.fill", LocalizedStrings.how_it_works_step_one),
         ("face.smiling.fill", LocalizedStrings.how_it_works_step_two),
-        ("nosign", LocalizedStrings.how_it_works_step_three),
+        ("sunglasses.fill", LocalizedStrings.how_it_works_step_three),
     ]
 
     var body: some View {
