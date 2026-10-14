@@ -54,6 +54,7 @@ struct HowItWorksView: View {
                                 }
                                 Text(step.label)
                                     .font(.system(size: 16, weight: .medium))
+                                    .lineSpacing(4)
                                     .foregroundColor(theme.colors.onBackground)
                                 Spacer(minLength: 0)
                             }
