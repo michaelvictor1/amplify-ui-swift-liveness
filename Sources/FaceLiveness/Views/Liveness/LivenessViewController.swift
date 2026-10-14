@@ -172,7 +172,8 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
             cover.accessibilityLabel = LocalizedStrings.challenge_verifying
 
             let spinner = UIActivityIndicatorView(style: .large)
-            spinner.color = .hex("#0470E2")
+            // text.tertiary, the same gray as the app's other loaders.
+            spinner.color = .hex("#667085")
             spinner.translatesAutoresizingMaskIntoConstraints = false
             spinner.startAnimating()
             cover.addSubview(spinner)
