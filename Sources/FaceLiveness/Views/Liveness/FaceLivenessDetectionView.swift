@@ -45,7 +45,11 @@ public struct FaceLivenessDetectorView: View {
     var cancelButtonOptions = CancelButtonOptions()
     let onCompletion: (Result<Void, FaceLivenessDetectionError>) -> Void
 
-    let sessionTask: Task<FaceLivenessSession, Error>
+    /// Kept for the one-time session start. Creating the task in `init` runs it on every
+    /// SwiftUI body pass, which opens the explainer a second time.
+    let sessionID: String
+    let region: String
+    let credentialsProvider: AWSCredentialsProvider?
 
     public init(
         sessionID: String,
@@ -62,16 +66,9 @@ public struct FaceLivenessDetectorView: View {
         self._isPresented = isPresented
         self.onCompletion = onCompletion
         self.challengeOptions = challengeOptions
-
-        self.sessionTask = Task {
-            let session = try await AWSPredictionsPlugin.startFaceLivenessSession(
-                withID: sessionID,
-                credentialsProvider: credentialsProvider,
-                region: region,
-                completion: map(detectionCompletion: onCompletion)
-            )
-            return session
-        }
+        self.sessionID = sessionID
+        self.region = region
+        self.credentialsProvider = credentialsProvider
 
         let faceDetector = try! FaceDetectorShortRange.Model()
         let faceInOvalStateMatching = FaceInOvalMatching()
@@ -111,16 +108,9 @@ public struct FaceLivenessDetectorView: View {
         self._isPresented = isPresented
         self.onCompletion = onCompletion
         self.challengeOptions = challengeOptions
-
-        self.sessionTask = Task {
-            let session = try await AWSPredictionsPlugin.startFaceLivenessSession(
-                withID: sessionID,
-                credentialsProvider: credentialsProvider,
-                region: region,
-                completion: map(detectionCompletion: onCompletion)
-            )
-            return session
-        }
+        self.sessionID = sessionID
+        self.region = region
+        self.credentialsProvider = credentialsProvider
 
         let faceInOvalStateMatching = FaceInOvalMatching()
 
@@ -201,12 +191,23 @@ public struct FaceLivenessDetectorView: View {
         case .awaitingChallengeType:
             LoadingPageView()
             .onAppear {
+                guard !viewModel.didRequestChallenge else { return }
+                viewModel.didRequestChallenge = true
+                let sessionTask = Task {
+                    try await AWSPredictionsPlugin.startFaceLivenessSession(
+                        withID: sessionID,
+                        credentialsProvider: credentialsProvider,
+                        region: region,
+                        completion: map(detectionCompletion: onCompletion)
+                    )
+                }
                 Task {
                     do {
                         let session = try await sessionTask.value
                         viewModel.livenessService = session
                         viewModel.registerServiceEvents(onChallengeTypeReceived: { challenge in
-                            self.displayState = DisplayState.awaitingCameraPermission(challenge)
+                            guard case .awaitingChallengeType = self.displayState else { return }
+                            self.displayState = .awaitingCameraPermission(challenge)
                         })
                         viewModel.initializeLivenessStream()
                     } catch let error as FaceLivenessDetectionError {

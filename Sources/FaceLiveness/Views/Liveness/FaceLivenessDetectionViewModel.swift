@@ -20,6 +20,9 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     @Published var isRecording = false
     @Published var livenessState: LivenessStateMachine
 
+    /// Hosting the detector runs `onAppear` again. A second start reloads the explainer.
+    var didRequestChallenge = false
+
     weak var livenessViewControllerDelegate: FaceLivenessViewControllerPresenter?
     var captureSession: LivenessCaptureSession?
     var closeButtonAction: () -> Void
