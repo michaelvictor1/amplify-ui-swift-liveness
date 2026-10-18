@@ -33,8 +33,8 @@ struct HowItWorksView: View {
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
                         Text(LocalizedStrings.how_it_works_subtitle)
-                            .font(.system(size: 18, weight: .medium))
-                            .lineSpacing(Self.extraLeading(size: 18, weight: .medium, lineHeight: 28))
+                            .font(.system(size: 17, weight: .regular))
+                            .lineSpacing(Self.extraLeading(size: 17, weight: .regular, lineHeight: 26))
                             .foregroundColor(Self.supportText)
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity)
@@ -115,16 +115,17 @@ struct HowItWorksView: View {
             : UIColor.hex("#475467")
     })
 
-    /// Matches onboarding `text.secondary` (`displaySm` title, `textLg` support).
+    /// Extra leading so the line box matches a React Native `lineHeight`.
     private static func extraLeading(size: CGFloat, weight: UIFont.Weight, lineHeight: CGFloat) -> CGFloat {
         let natural = UIFont.systemFont(ofSize: size, weight: weight).lineHeight
         return max(0, lineHeight - natural)
     }
 
+    /// Onboarding subtitle: `text.tertiary`.
     private static let supportText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
-            ? UIColor.hex("#D0D5DD")
-            : UIColor.hex("#475467")
+            ? UIColor.hex("#98A2B3")
+            : UIColor.hex("#667085")
     })
 
     private static let secondaryText = Color(uiColor: UIColor { traits in
