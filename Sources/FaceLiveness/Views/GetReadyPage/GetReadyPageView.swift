@@ -53,7 +53,7 @@ struct GetReadyPageView: View {
                         .frame(maxWidth: .infinity)
                     Spacer(minLength: 0)
                 }
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 24)
                 .padding(.top, 16)
             }
             beginCheckButton
@@ -66,7 +66,7 @@ struct GetReadyPageView: View {
             action: onBegin,
             disabled: beginCheckButtonDisabled
         )
-        .padding([.leading, .trailing])
+        .padding(.horizontal, 24)
         .padding(.bottom, 16)
     }
 }
