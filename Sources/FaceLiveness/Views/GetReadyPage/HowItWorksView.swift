@@ -87,7 +87,7 @@ struct HowItWorksView: View {
         .background(theme.colors.background.ignoresSafeArea())
             CloseButton(action: onClose)
                 .padding(.top, 16)
-                .padding(.trailing, 16)
+                .padding(.trailing, 24)
         }
     }
 
