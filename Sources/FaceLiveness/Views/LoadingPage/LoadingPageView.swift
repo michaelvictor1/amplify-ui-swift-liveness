@@ -6,22 +6,29 @@
 //
 
 import SwiftUI
+import UIKit
 
+/// Shown while the session starts, before the explainer. Same large gray
+/// spinner as the verifying cover, with no line beside it.
 struct LoadingPageView: View {
-    @Environment(\.faceLivenessDetectorTheme) private var theme
-
     var body: some View {
-        VStack {
-            HStack(spacing: 5) {
-                // `.tint(_:)` doesn't color the circular style on iOS 15
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: theme.colors.primary))
-                Text(LocalizedStrings.challenge_connecting)
-                    .font(theme.fonts.body)
-                    .foregroundColor(theme.colors.onBackground)
-            }
-        }
+        LivenessSpinner()
+            .fixedSize()
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(LocalizedStrings.challenge_connecting)
     }
+}
+
+/// `UIActivityIndicatorView` large, `text.tertiary`. Matches `beginVerifyingCover`.
+private struct LivenessSpinner: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIActivityIndicatorView {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = .hex("#667085")
+        spinner.startAnimating()
+        return spinner
+    }
+
+    func updateUIView(_ spinner: UIActivityIndicatorView, context: Context) {}
 }
 
 struct LoadingPageView_Previews: PreviewProvider {
