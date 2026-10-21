@@ -42,9 +42,6 @@ struct HowItWorksView: View {
                     .padding(.top, 80)
 
                     VStack(alignment: .leading, spacing: 20) {
-                        Text(LocalizedStrings.how_it_works_before)
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(Self.secondaryText)
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
                             HStack(alignment: .center, spacing: 12) {
                                 ZStack {
@@ -126,11 +123,5 @@ struct HowItWorksView: View {
         traits.userInterfaceStyle == .dark
             ? UIColor.hex("#98A2B3")
             : UIColor.hex("#667085")
-    })
-
-    private static let secondaryText = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor.hex("#D0D5DD")
-            : UIColor.hex("#344054")
     })
 }
