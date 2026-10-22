@@ -69,8 +69,7 @@ struct HowItWorksView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
             VStack(spacing: 20) {
-                Text(LocalizedStrings.how_it_works_legal)
-                    .font(.system(size: 12, weight: .regular))
+                legalText
                     .lineSpacing(4)
                     .foregroundColor(Self.tertiaryText)
                     .multilineTextAlignment(.center)
@@ -86,6 +85,19 @@ struct HowItWorksView: View {
                 .padding(.top, 16)
                 .padding(.trailing, 24)
         }
+    }
+
+    /// Second sentence is bold. The words stay one localized string.
+    private var legalText: Text {
+        let full = LocalizedStrings.how_it_works_legal
+        let emphasis = "Vector never sees or stores your verification recording."
+        let size: CGFloat = 12
+        guard let range = full.range(of: emphasis) else {
+            return Text(full).font(.system(size: size, weight: .regular))
+        }
+        let lead = String(full[..<range.lowerBound])
+        return Text(lead).font(.system(size: size, weight: .regular))
+            + Text(emphasis).font(.system(size: size, weight: .bold))
     }
 
     private var verifyButton: some View {
