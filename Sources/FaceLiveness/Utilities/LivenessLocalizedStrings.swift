@@ -50,6 +50,9 @@ enum LocalizedStrings {
     /// en = "By continuing, you consent to a facial scan to confirm you’re a real person and match your profile photo. Vector never sees or stores your verification recording."
     static let how_it_works_legal = "amplify_ui_liveness_how_it_works_legal".localized()
 
+    /// en = "Your video is never saved and is only used once to verify your profile photo."
+    static let challenge_fit_note = "amplify_ui_liveness_challenge_fit_note".localized()
+
     /// en = "REC"
     static let challenge_recording_indicator_label = "amplify_ui_liveness_challenge_recording_indicator_label".localized()
 

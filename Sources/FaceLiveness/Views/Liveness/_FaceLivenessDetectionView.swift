@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct _FaceLivenessDetectionView<VideoView: View>: View {
     let videoView: VideoView
@@ -62,19 +63,44 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
     }
 
     /// Fit progress sits under the oval, not under the direction line.
+    /// The note uses the explainer legal size: 12pt regular, line height 20, text.tertiary.
     @ViewBuilder
     private var progressBelowOval: some View {
         if let percentage = fitProgress, viewModel.ovalRect.height > 0 {
             GeometryReader { geo in
                 let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
-                let barHeight: CGFloat = 7
-                let y = preview.minY + viewModel.ovalRect.maxY + 52 + barHeight / 2
-                ProgressBarView(percentage: percentage)
-                    .position(x: geo.size.width / 2, y: y)
+                let barTop = preview.minY + viewModel.ovalRect.maxY + 52
+                Color.clear
+                    .overlay(alignment: .top) {
+                        VStack(spacing: 8) {
+                            ProgressBarView(percentage: percentage)
+                            Text(LocalizedStrings.challenge_fit_note)
+                                .font(.system(size: 12, weight: .regular))
+                                .lineSpacing(Self.noteLeading)
+                                .foregroundColor(Self.noteColor)
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .frame(width: geo.size.width - 48)
+                        }
+                        .offset(y: barTop)
+                    }
             }
             .allowsHitTesting(false)
         }
     }
+
+    /// Extra leading so the line box matches the explainer note’s `lineHeight` of 20.
+    private static var noteLeading: CGFloat {
+        let natural = UIFont.systemFont(ofSize: 12, weight: .regular).lineHeight
+        return max(0, 20 - natural)
+    }
+
+    /// `text.tertiary`.
+    private static let noteColor = Color(uiColor: UIColor { traits in
+        traits.userInterfaceStyle == .dark
+            ? UIColor.hex("#98A2B3")
+            : UIColor.hex("#667085")
+    })
 
     private var fitProgress: Double? {
         switch viewModel.livenessState.state {
