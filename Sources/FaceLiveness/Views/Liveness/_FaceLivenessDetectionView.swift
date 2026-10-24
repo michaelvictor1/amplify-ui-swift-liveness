@@ -8,6 +8,13 @@
 import SwiftUI
 import UIKit
 
+/// `text.tertiary`. A static stored property on the generic view below does not compile.
+private let faceCheckNoteColor = Color(uiColor: UIColor { traits in
+    traits.userInterfaceStyle == .dark
+        ? UIColor.hex("#98A2B3")
+        : UIColor.hex("#667085")
+})
+
 struct _FaceLivenessDetectionView<VideoView: View>: View {
     let videoView: VideoView
     @ObservedObject var viewModel: FaceLivenessDetectionViewModel
@@ -77,7 +84,7 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
                             Text(LocalizedStrings.challenge_fit_note)
                                 .font(.system(size: 12, weight: .regular))
                                 .lineSpacing(Self.noteLeading)
-                                .foregroundColor(Self.noteColor)
+                                .foregroundColor(faceCheckNoteColor)
                                 .multilineTextAlignment(.center)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .frame(width: geo.size.width - 48)
@@ -94,13 +101,6 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
         let natural = UIFont.systemFont(ofSize: 12, weight: .regular).lineHeight
         return max(0, 20 - natural)
     }
-
-    /// `text.tertiary`.
-    private static let noteColor = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor.hex("#98A2B3")
-            : UIColor.hex("#667085")
-    })
 
     private var fitProgress: Double? {
         switch viewModel.livenessState.state {
