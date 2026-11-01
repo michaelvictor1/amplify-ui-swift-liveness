@@ -68,7 +68,12 @@ struct HowItWorksView: View {
                 .padding(.bottom, 24)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
+                Text(LocalizedStrings.how_it_works_privacy)
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundColor(Self.tertiaryText)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
                 legalText
                     .lineSpacing(4)
                     .foregroundColor(Self.tertiaryText)
