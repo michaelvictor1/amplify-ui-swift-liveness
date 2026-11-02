@@ -6,20 +6,18 @@
 //
 
 import SwiftUI
-import UIKit
-
-/// `text.tertiary`. A static stored property on the generic view below does not compile.
-private let faceCheckNoteColor = Color(uiColor: UIColor { traits in
-    traits.userInterfaceStyle == .dark
-        ? UIColor.hex("#98A2B3")
-        : UIColor.hex("#667085")
-})
 
 struct _FaceLivenessDetectionView<VideoView: View>: View {
     let videoView: VideoView
     @ObservedObject var viewModel: FaceLivenessDetectionViewModel
     @Binding var displayResultsView: Bool
     let cancelButtonOptions: CancelButtonOptions
+
+    /// Same gap the bar used under the oval, now above it and under the direction.
+    private static let barClearance: CGFloat = 52
+    private static let barHeight: CGFloat = 7
+    /// Close row + direction line, then `barClearance` before the bar.
+    private static let minBarTop: CGFloat = 16 + 44 + 12 + 36 + 52
 
     init(
         viewModel: FaceLivenessDetectionViewModel,
@@ -65,41 +63,27 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
         // as a lip under the home indicator, including while the colors flash.
         .ignoresSafeArea(edges: .bottom)
         .overlay {
-            progressBelowOval
+            progressAboveOval
         }
     }
 
-    /// Fit progress sits under the oval, not under the direction line.
-    /// The note is 12pt medium, line height 18, text.tertiary, 20pt under the bar.
+    /// Fit progress sits above the oval. Same show/hide as before.
     @ViewBuilder
-    private var progressBelowOval: some View {
+    private var progressAboveOval: some View {
         if let percentage = fitProgress, viewModel.ovalRect.height > 0 {
             GeometryReader { geo in
                 let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
-                let barTop = preview.minY + viewModel.ovalRect.maxY + 52
+                let ovalTop = preview.minY + viewModel.ovalRect.minY
+                let preferred = ovalTop - Self.barClearance - Self.barHeight
+                let barTop = max(Self.minBarTop, preferred)
                 Color.clear
                     .overlay(alignment: .top) {
-                        VStack(spacing: 20) {
-                            ProgressBarView(percentage: percentage)
-                            Text(LocalizedStrings.challenge_fit_note)
-                                .font(.system(size: 12, weight: .medium))
-                                .lineSpacing(Self.noteLeading)
-                                .foregroundColor(faceCheckNoteColor)
-                                .multilineTextAlignment(.center)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .frame(width: geo.size.width - 48)
-                        }
-                        .offset(y: barTop)
+                        ProgressBarView(percentage: percentage)
+                            .offset(y: barTop)
                     }
             }
             .allowsHitTesting(false)
         }
-    }
-
-    /// Extra leading so the line box is 18, a little tighter than the explainer note.
-    private static var noteLeading: CGFloat {
-        let natural = UIFont.systemFont(ofSize: 12, weight: .medium).lineHeight
-        return max(0, 18 - natural)
     }
 
     private var fitProgress: Double? {
