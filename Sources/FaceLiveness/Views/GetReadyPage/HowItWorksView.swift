@@ -24,6 +24,8 @@ struct HowItWorksView: View {
         ZStack(alignment: .topTrailing) {
         VStack(spacing: 0) {
             VStack(spacing: 32) {
+                    // Same 8pt as Create Account, between a 38pt title box
+                    // and a 30pt subtitle box (`displaySm` / `textXl`).
                     VStack(spacing: 8) {
                         Text(LocalizedStrings.how_it_works_title)
                             .font(.system(size: 30, weight: .semibold))
@@ -31,13 +33,13 @@ struct HowItWorksView: View {
                             .lineSpacing(Self.extraLeading(size: 30, weight: .semibold, lineHeight: 38))
                             .foregroundColor(theme.colors.onBackground)
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, minHeight: 38)
                         Text(LocalizedStrings.how_it_works_subtitle)
                             .font(.system(size: 20, weight: .regular))
                             .lineSpacing(Self.extraLeading(size: 20, weight: .regular, lineHeight: 30))
                             .foregroundColor(Self.supportText)
                             .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
+                            .frame(maxWidth: .infinity, minHeight: 30)
                     }
                     .padding(.top, 80)
 
