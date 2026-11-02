@@ -9,9 +9,6 @@ import SwiftUI
 
 /// A static stored property on the generic view below does not compile.
 private let faceCheckBarClearance: CGFloat = 52
-private let faceCheckBarHeight: CGFloat = 7
-/// Close row + direction line, then `faceCheckBarClearance` before the bar.
-private let faceCheckMinBarTop: CGFloat = 16 + 44 + 12 + 36 + 52
 
 struct _FaceLivenessDetectionView<VideoView: View>: View {
     let videoView: VideoView
@@ -63,19 +60,17 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
         // as a lip under the home indicator, including while the colors flash.
         .ignoresSafeArea(edges: .bottom)
         .overlay {
-            progressAboveOval
+            progressBelowOval
         }
     }
 
-    /// Fit progress sits above the oval. Same show/hide as before.
+    /// Fit progress sits under the oval. Same show/hide as before.
     @ViewBuilder
-    private var progressAboveOval: some View {
+    private var progressBelowOval: some View {
         if let percentage = fitProgress, viewModel.ovalRect.height > 0 {
             GeometryReader { geo in
                 let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
-                let ovalTop = preview.minY + viewModel.ovalRect.minY
-                let preferred = ovalTop - faceCheckBarClearance - faceCheckBarHeight
-                let barTop = max(faceCheckMinBarTop, preferred)
+                let barTop = preview.minY + viewModel.ovalRect.maxY + faceCheckBarClearance
                 Color.clear
                     .overlay(alignment: .top) {
                         ProgressBarView(percentage: percentage)
