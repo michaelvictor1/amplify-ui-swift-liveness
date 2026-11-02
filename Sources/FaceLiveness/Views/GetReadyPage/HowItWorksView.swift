@@ -87,7 +87,7 @@ struct HowItWorksView: View {
         }
     }
 
-    /// Second sentence is bold. The words stay one localized string.
+    /// Second sentence is medium. The words stay one localized string.
     private var legalText: Text {
         let full = LocalizedStrings.how_it_works_legal
         let emphasis = "Vector never sees or stores your verification recording."
@@ -97,7 +97,7 @@ struct HowItWorksView: View {
         }
         let lead = String(full[..<range.lowerBound])
         return Text(lead).font(.system(size: size, weight: .regular))
-            + Text(emphasis).font(.system(size: size, weight: .bold))
+            + Text(emphasis).font(.system(size: size, weight: .medium))
     }
 
     private var verifyButton: some View {
