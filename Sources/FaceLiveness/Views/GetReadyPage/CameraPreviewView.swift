@@ -13,6 +13,9 @@ struct CameraPreviewView: View {
     private static let previewXPositionRatio = 0.5
     /// Same center as the scanning oval, which sits in the middle of the camera.
     private static let previewYPositionRatio = 0.5
+    /// Vector `shadow.md` — `color.gray.900` at 0.10, 4pt down, 8pt blur.
+    private static let ovalShadow = Color(red: 16 / 255, green: 24 / 255, blue: 40 / 255)
+        .opacity(0.10)
 
     @StateObject var model: CameraPreviewViewModel
     var onReadyOval: (CGRect) -> Void = { _ in }
@@ -30,38 +33,30 @@ struct CameraPreviewView: View {
     }
 
     var body: some View {
-        ZStack {
-            ImageFrameView(image: model.currentImageFrame)
-                .edgesIgnoringSafeArea(.all)
-                .mask(
-                    GeometryReader { geometry in
-                        Ellipse()
-                            .frame(width: geometry.size.width*Self.previewWidthRatio,
-                                   height: geometry.size.height*Self.previewHeightRatio)
-                            .position(x: geometry.size.width*Self.previewXPositionRatio,
-                                      y: geometry.size.height*Self.previewYPositionRatio)
-                    })
-            GeometryReader { geometry in
-                Ellipse()
-                    .stroke(Color.livenessPreviewBorder, style: StrokeStyle(lineWidth: 3))
-                    .frame(width: geometry.size.width*Self.previewWidthRatio,
-                           height: geometry.size.height*Self.previewHeightRatio)
-                    .position(x: geometry.size.width*Self.previewXPositionRatio,
-                              y: geometry.size.height*Self.previewYPositionRatio)
+        ImageFrameView(image: model.currentImageFrame)
+            .edgesIgnoringSafeArea(.all)
+            .mask(
+                GeometryReader { geometry in
+                    Ellipse()
+                        .frame(width: geometry.size.width*Self.previewWidthRatio,
+                               height: geometry.size.height*Self.previewHeightRatio)
+                        .position(x: geometry.size.width*Self.previewXPositionRatio,
+                                  y: geometry.size.height*Self.previewYPositionRatio)
+                })
+            .compositingGroup()
+            .shadow(color: Self.ovalShadow, radius: 8, x: 0, y: 4)
+            .background(
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: ReadyOvalFrameKey.self,
+                        value: Self.ovalFrame(in: geometry)
+                    )
+                }
+            )
+            .onPreferenceChange(ReadyOvalFrameKey.self, perform: onReadyOval)
+            .onDisappear {
+                model.stopSession()
             }
-        }
-        .background(
-            GeometryReader { geometry in
-                Color.clear.preference(
-                    key: ReadyOvalFrameKey.self,
-                    value: Self.ovalFrame(in: geometry)
-                )
-            }
-        )
-        .onPreferenceChange(ReadyOvalFrameKey.self, perform: onReadyOval)
-        .onDisappear {
-            model.stopSession()
-        }
     }
 
     /// The preview ellipse in screen coordinates.

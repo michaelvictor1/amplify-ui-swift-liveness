@@ -29,8 +29,8 @@ import SwiftUI
 /// they're on screen, pass a new theme to ``View/faceLivenessDetectorTheme(_:)``. Create your themes
 /// once and keep them: creating one on every redraw updates the views on every redraw.
 ///
-/// The background around the face oval, the oval's outline, and the colors flashed during the
-/// check light the user's face, so they aren't part of the theme.
+/// The background around the face oval, the oval opening's drop shadow, and the colors flashed
+/// during the check light the user's face, so they aren't part of the theme.
 ///
 /// Android equivalent: wrapping `FaceLivenessDetector` in a `MaterialTheme`.
 @MainActor

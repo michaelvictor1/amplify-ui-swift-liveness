@@ -20,8 +20,8 @@ class OvalView: UIView {
     private(set) var cutoutInView: CGRect?
     private var growing = false
 
-    private let outlineLayer = CAShapeLayer()
-    private let outlineMask = CAShapeLayer()
+    /// Soft drop shadow of the hole only — not the page edge.
+    private let holeShadowLayer = CAShapeLayer()
 
     override class var layerClass: AnyClass { CAShapeLayer.self }
 
@@ -36,15 +36,20 @@ class OvalView: UIView {
 
         overlayLayer.fillColor = UIColor.white.cgColor
         overlayLayer.fillRule = .evenOdd
+        overlayLayer.masksToBounds = false
 
-        // A 4pt outline whose inner half is cut away with the oval
-        outlineLayer.fillColor = nil
-        outlineLayer.strokeColor = UIColor.hex("#AEB3B7").cgColor
-        outlineLayer.lineWidth = 4
-        outlineMask.fillColor = UIColor.black.cgColor
-        outlineMask.fillRule = .evenOdd
-        outlineLayer.mask = outlineMask
-        layer.addSublayer(outlineLayer)
+        // Vector `shadow.md` — `color.gray.900` at 0.10, 4pt down, 8pt blur.
+        holeShadowLayer.fillColor = UIColor.clear.cgColor
+        holeShadowLayer.shadowColor = UIColor(
+            red: 16 / 255,
+            green: 24 / 255,
+            blue: 40 / 255,
+            alpha: 1
+        ).cgColor
+        holeShadowLayer.shadowOpacity = 0.10
+        holeShadowLayer.shadowRadius = 8
+        holeShadowLayer.shadowOffset = CGSize(width: 0, height: 4)
+        layer.addSublayer(holeShadowLayer)
     }
 
     /// ``ovalFrame`` in this view's coordinates, for where the preview sits at the view's current
@@ -86,10 +91,8 @@ class OvalView: UIView {
         CATransaction.begin()
         CATransaction.setDisableActions(true)
         overlayLayer.path = endOverlay.cgPath
-        outlineLayer.frame = bounds
-        outlineLayer.path = endOval.cgPath
-        outlineMask.frame = bounds
-        outlineMask.path = endOverlay.cgPath
+        holeShadowLayer.frame = bounds
+        holeShadowLayer.shadowPath = endOval.cgPath
         CATransaction.commit()
 
         guard let start else { return }
@@ -103,19 +106,18 @@ class OvalView: UIView {
         grow.fromValue = startOverlay.cgPath
         grow.toValue = endOverlay.cgPath
 
-        let stroke = CABasicAnimation(keyPath: "path")
-        stroke.duration = grow.duration
-        stroke.timingFunction = grow.timingFunction
-        stroke.fromValue = startOval.cgPath
-        stroke.toValue = endOval.cgPath
+        let shadowGrow = CABasicAnimation(keyPath: "shadowPath")
+        shadowGrow.duration = grow.duration
+        shadowGrow.timingFunction = grow.timingFunction
+        shadowGrow.fromValue = startOval.cgPath
+        shadowGrow.toValue = endOval.cgPath
 
         CATransaction.begin()
         CATransaction.setCompletionBlock { [weak self] in
             self?.growing = false
         }
         overlayLayer.add(grow, forKey: "grow")
-        outlineMask.add(grow, forKey: "grow")
-        outlineLayer.add(stroke, forKey: "grow")
+        holeShadowLayer.add(shadowGrow, forKey: "grow")
         CATransaction.commit()
     }
 
