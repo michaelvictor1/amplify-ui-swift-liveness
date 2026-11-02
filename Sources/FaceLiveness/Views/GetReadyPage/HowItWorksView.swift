@@ -130,10 +130,6 @@ struct HowItWorksView: View {
         return max(0, lineHeight - natural)
     }
 
-    /// Onboarding subtitle: `text.quaternary`.
-    private static let supportText = Color(uiColor: UIColor { traits in
-        traits.userInterfaceStyle == .dark
-            ? UIColor.hex("#667085")
-            : UIColor.hex("#98A2B3")
-    })
+    /// Onboarding subtitle: halfway between `text.tertiary` and `text.quaternary`.
+    private static let supportText = Color(uiColor: UIColor.hex("#7F899C"))
 }
