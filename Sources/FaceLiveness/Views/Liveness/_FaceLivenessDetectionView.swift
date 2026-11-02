@@ -70,7 +70,7 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
     }
 
     /// Fit progress sits under the oval, not under the direction line.
-    /// The note uses the explainer legal size: 12pt regular, line height 20, text.tertiary.
+    /// The note is 12pt medium, line height 18, text.tertiary, 20pt under the bar.
     @ViewBuilder
     private var progressBelowOval: some View {
         if let percentage = fitProgress, viewModel.ovalRect.height > 0 {
@@ -79,10 +79,10 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
                 let barTop = preview.minY + viewModel.ovalRect.maxY + 52
                 Color.clear
                     .overlay(alignment: .top) {
-                        VStack(spacing: 8) {
+                        VStack(spacing: 20) {
                             ProgressBarView(percentage: percentage)
                             Text(LocalizedStrings.challenge_fit_note)
-                                .font(.system(size: 12, weight: .regular))
+                                .font(.system(size: 12, weight: .medium))
                                 .lineSpacing(Self.noteLeading)
                                 .foregroundColor(faceCheckNoteColor)
                                 .multilineTextAlignment(.center)
@@ -96,10 +96,10 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
         }
     }
 
-    /// Extra leading so the line box matches the explainer note’s `lineHeight` of 20.
+    /// Extra leading so the line box is 18, a little tighter than the explainer note.
     private static var noteLeading: CGFloat {
-        let natural = UIFont.systemFont(ofSize: 12, weight: .regular).lineHeight
-        return max(0, 20 - natural)
+        let natural = UIFont.systemFont(ofSize: 12, weight: .medium).lineHeight
+        return max(0, 18 - natural)
     }
 
     private var fitProgress: Double? {
