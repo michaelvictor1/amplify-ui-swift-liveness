@@ -41,7 +41,7 @@ struct HowItWorksView: View {
                     }
                     .padding(.top, 80)
 
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
                             HStack(alignment: .center, spacing: 12) {
                                 ZStack {
