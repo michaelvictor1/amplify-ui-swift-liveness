@@ -120,10 +120,11 @@ struct HowItWorksView: View {
             : UIColor.hex("#EFF1FA")
     })
 
+    /// Same ink as Create Account Terms (`text.tertiary`).
     private static let tertiaryText = Color(uiColor: UIColor { traits in
         traits.userInterfaceStyle == .dark
             ? UIColor.hex("#98A2B3")
-            : UIColor.hex("#475467")
+            : UIColor.hex("#667085")
     })
 
     /// Extra leading so the line box matches a React Native `lineHeight`.
