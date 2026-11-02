@@ -7,17 +7,17 @@
 
 import SwiftUI
 
+/// A static stored property on the generic view below does not compile.
+private let faceCheckBarClearance: CGFloat = 52
+private let faceCheckBarHeight: CGFloat = 7
+/// Close row + direction line, then `faceCheckBarClearance` before the bar.
+private let faceCheckMinBarTop: CGFloat = 16 + 44 + 12 + 36 + 52
+
 struct _FaceLivenessDetectionView<VideoView: View>: View {
     let videoView: VideoView
     @ObservedObject var viewModel: FaceLivenessDetectionViewModel
     @Binding var displayResultsView: Bool
     let cancelButtonOptions: CancelButtonOptions
-
-    /// Same gap the bar used under the oval, now above it and under the direction.
-    private static let barClearance: CGFloat = 52
-    private static let barHeight: CGFloat = 7
-    /// Close row + direction line, then `barClearance` before the bar.
-    private static let minBarTop: CGFloat = 16 + 44 + 12 + 36 + 52
 
     init(
         viewModel: FaceLivenessDetectionViewModel,
@@ -74,8 +74,8 @@ struct _FaceLivenessDetectionView<VideoView: View>: View {
             GeometryReader { geo in
                 let preview = LivenessPreviewGeometry.previewRect(fittingIn: geo.size)
                 let ovalTop = preview.minY + viewModel.ovalRect.minY
-                let preferred = ovalTop - Self.barClearance - Self.barHeight
-                let barTop = max(Self.minBarTop, preferred)
+                let preferred = ovalTop - faceCheckBarClearance - faceCheckBarHeight
+                let barTop = max(faceCheckMinBarTop, preferred)
                 Color.clear
                     .overlay(alignment: .top) {
                         ProgressBarView(percentage: percentage)
