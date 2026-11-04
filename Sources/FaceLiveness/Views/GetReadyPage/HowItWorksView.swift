@@ -26,22 +26,24 @@ struct HowItWorksView: View {
             VStack(spacing: 32) {
                     // Same 8pt as Create Account, between a 38pt title box
                     // and a 30pt subtitle box (`displaySm` / `textXl`).
-                    VStack(spacing: 8) {
+                    // Top inset matches the form steps: top-bar slot 52 +
+                    // `ONBOARDING_TITLE_TOP` 40.
+                    VStack(alignment: .leading, spacing: 8) {
                         Text(LocalizedStrings.how_it_works_title)
                             .font(.system(size: 30, weight: .semibold))
                             .kerning(-0.6)
                             .lineSpacing(Self.extraLeading(size: 30, weight: .semibold, lineHeight: 38))
                             .foregroundColor(theme.colors.onBackground)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, minHeight: 38)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, minHeight: 38, alignment: .leading)
                         Text(LocalizedStrings.how_it_works_subtitle)
                             .font(.system(size: 20, weight: .regular))
                             .lineSpacing(Self.extraLeading(size: 20, weight: .regular, lineHeight: 30))
                             .foregroundColor(Self.supportText)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, minHeight: 30)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
                     }
-                    .padding(.top, 80)
+                    .padding(.top, 92)
 
                     VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
