@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-/// Same track as Create Account, a little wider: 140×7, fully rounded.
+/// Same height as Create Account, a little wider: 140×10, fully rounded.
 /// Light track is brand.100, dark track is brand.700, fill is brand primary.
 struct ProgressBarView: View {
     @Environment(\.faceLivenessDetectorTheme) private var theme
@@ -16,7 +16,7 @@ struct ProgressBarView: View {
     let percentage: Double
 
     private let trackWidth: CGFloat = 140
-    private let trackHeight: CGFloat = 7
+    private let trackHeight: CGFloat = 10
 
     var body: some View {
         ZStack(alignment: .leading) {
