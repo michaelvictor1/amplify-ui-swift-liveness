@@ -47,7 +47,7 @@ enum LocalizedStrings {
     /// en = "Remove sunglasses or anything covering your face."
     static let how_it_works_step_three = "amplify_ui_liveness_how_it_works_step_three".localized()
 
-    /// en = "By continuing, you agree to a quick face scan to make sure you’re real and match your profile photo. Vector never sees or stores your verification recording."
+    /// en = "By continuing, you agree to a quick face scan to confirm you’re the person in your profile photo. This helps protect our community from fake profiles and impersonation."
     static let how_it_works_legal = "amplify_ui_liveness_how_it_works_legal".localized()
 
     /// en = "REC"

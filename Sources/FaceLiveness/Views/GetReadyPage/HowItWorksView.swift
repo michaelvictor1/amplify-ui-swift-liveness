@@ -94,7 +94,7 @@ struct HowItWorksView: View {
     /// Second sentence is medium. The words stay one localized string.
     private var legalText: Text {
         let full = LocalizedStrings.how_it_works_legal
-        let emphasis = "Vector never sees or stores your verification recording."
+        let emphasis = "This helps protect our community from fake profiles and impersonation."
         let size: CGFloat = 12
         guard let range = full.range(of: emphasis) else {
             return Text(full).font(.system(size: size, weight: .regular))
