@@ -27,7 +27,7 @@ struct HowItWorksView: View {
                     // Same 8pt as Create Account, between a 38pt title box
                     // and a 30pt subtitle box (`displaySm` / `textXl`).
                     // Top inset matches the form steps: top-bar slot 52 +
-                    // `ONBOARDING_STEP_ICON_TOP` 8, then 24 under the icon.
+                    // `ONBOARDING_STEP_ICON_TOP` 16, then 24 under the icon.
                     VStack(spacing: 24) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 36, style: .continuous)
@@ -54,7 +54,7 @@ struct HowItWorksView: View {
                                 .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
                         }
                     }
-                    .padding(.top, 60)
+                    .padding(.top, 68)
 
                     VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
