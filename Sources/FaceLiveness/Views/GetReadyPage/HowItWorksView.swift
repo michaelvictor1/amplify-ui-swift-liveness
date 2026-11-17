@@ -27,23 +27,34 @@ struct HowItWorksView: View {
                     // Same 8pt as Create Account, between a 38pt title box
                     // and a 30pt subtitle box (`displaySm` / `textXl`).
                     // Top inset matches the form steps: top-bar slot 52 +
-                    // `ONBOARDING_TITLE_TOP` 40.
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(LocalizedStrings.how_it_works_title)
-                            .font(.system(size: 30, weight: .semibold))
-                            .kerning(-0.6)
-                            .lineSpacing(Self.extraLeading(size: 30, weight: .semibold, lineHeight: 38))
-                            .foregroundColor(theme.colors.onBackground)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, minHeight: 38, alignment: .leading)
-                        Text(LocalizedStrings.how_it_works_subtitle)
-                            .font(.system(size: 20, weight: .regular))
-                            .lineSpacing(Self.extraLeading(size: 20, weight: .regular, lineHeight: 30))
-                            .foregroundColor(Self.supportText)
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
+                    // `ONBOARDING_STEP_ICON_TOP` 8, then 24 under the icon.
+                    VStack(spacing: 24) {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 36, style: .continuous)
+                                .fill(Self.brandWash)
+                                .frame(width: 72, height: 72)
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 32, weight: .regular))
+                                .foregroundColor(Self.brandIcon)
+                        }
+                        .frame(maxWidth: .infinity)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(LocalizedStrings.how_it_works_title)
+                                .font(.system(size: 30, weight: .semibold))
+                                .kerning(-0.6)
+                                .lineSpacing(Self.extraLeading(size: 30, weight: .semibold, lineHeight: 38))
+                                .foregroundColor(theme.colors.onBackground)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, minHeight: 38, alignment: .leading)
+                            Text(LocalizedStrings.how_it_works_subtitle)
+                                .font(.system(size: 20, weight: .regular))
+                                .lineSpacing(Self.extraLeading(size: 20, weight: .regular, lineHeight: 30))
+                                .foregroundColor(Self.supportText)
+                                .multilineTextAlignment(.leading)
+                                .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
+                        }
                     }
-                    .padding(.top, 92)
+                    .padding(.top, 60)
 
                     VStack(alignment: .leading, spacing: 24) {
                         ForEach(Array(steps.enumerated()), id: \.offset) { _, step in
