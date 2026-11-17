@@ -35,7 +35,7 @@ enum LocalizedStrings {
     /// en = "Verify it’s you"
     static let how_it_works_title = "amplify_ui_liveness_how_it_works_title".localized()
 
-    /// en = "No fake profiles. Just real guys, like you."
+    /// en = "Real guys. Real photos. Real connections."
     static let how_it_works_subtitle = "amplify_ui_liveness_how_it_works_subtitle".localized()
 
     /// en = "Find a spot with good lighting."
