@@ -33,7 +33,7 @@ struct HowItWorksView: View {
                             RoundedRectangle(cornerRadius: 36, style: .continuous)
                                 .fill(Self.brandWash)
                                 .frame(width: 72, height: 72)
-                            Image(systemName: "paperplane.fill")
+                            Image(systemName: "viewfinder")
                                 .font(.system(size: 32, weight: .regular))
                                 .foregroundColor(Self.brandIcon)
                         }
